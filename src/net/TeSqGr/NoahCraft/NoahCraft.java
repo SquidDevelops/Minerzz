@@ -9,6 +9,10 @@ public class NoahCraft {
     public static void main(String[] args) {
         new NoahCraft();
         instance.noahLogger.exiting("NoahCraft", "Main");
+
+
+
+
     }
 
     public static NoahCraft instance;
