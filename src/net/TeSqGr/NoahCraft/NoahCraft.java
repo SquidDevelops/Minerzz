@@ -1,6 +1,6 @@
-package net.TeSqGr.Minerzz;
+package net.TeSqGr.NoahCraft;
 
-public class Minerzz{
+public class NoahCraft {
 
     public static void main(String[] args){
 
