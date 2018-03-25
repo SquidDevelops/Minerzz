@@ -15,6 +15,22 @@ public class NoahCraft {
 
     }
 
+
+    public void init(){
+
+    }
+
+    public void dispose(){
+
+    }
+
+    public void gameLoop(){
+
+    }
+
+    public void
+
+
     public static NoahCraft instance;
 
     public NoahCraft() {
