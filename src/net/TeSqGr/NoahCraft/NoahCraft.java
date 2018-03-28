@@ -50,6 +50,7 @@ public class NoahCraft {
 
     public void dispose(){
         window.visible(false);
+        renderer.dispose();
         window.dispose();
     }
 
