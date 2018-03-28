@@ -26,6 +26,11 @@ public class Window {
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         int x = (vidmode.width() - width) / 2;
         int y = (vidmode.height() - height) / 2;
+
+        glfwMakeContextCurrent(window);
+
+        glfwSwapInterval(1);
+
         glfwSetWindowPos(window, x, y);
     }
 

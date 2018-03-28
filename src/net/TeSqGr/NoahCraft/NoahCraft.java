@@ -58,6 +58,7 @@ public class NoahCraft {
         double delta, accumulator = 0.0, interval = 1.0/20.0, alpha;
         timer.init();
         while(!window.shouldClose()){
+            timer.update();
             delta = timer.delta();
             accumulator += delta;
             input();
@@ -66,6 +67,7 @@ public class NoahCraft {
                 accumulator -= interval;
             }
             render();
+            //System.out.println("FPS:" + timer.getFPS());
         }
     }
 
