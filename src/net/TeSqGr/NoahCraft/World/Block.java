@@ -22,8 +22,10 @@ public class Block {
                 break;
             case GRASS:
                 return 4;
+                break;
             case COBBLESTONE:
                 return 5;
+                break;
         }
     }
 }
