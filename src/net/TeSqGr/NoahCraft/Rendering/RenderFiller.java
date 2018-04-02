@@ -34,11 +34,15 @@ public class RenderFiller {
 
     float xRot = 0.0f;
 
+    float yRot = 0.0f;
+
+    float zRot = 0.0f;
+
     public RenderFiller(Window window){
 
         GL.createCapabilities();
         Shaders.compileShaders();
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+//        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         try {
             Shaders.createUniform("projection");
             Shaders.createUniform("transform");
@@ -73,22 +77,27 @@ public class RenderFiller {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        xRot += 0.01f;
+        xRot += 1f;
+
+        yRot += 0f;
+
+        zRot += 0f;
+
 
         Shaders.bind();
 
         Shaders.setUniform("projection", projection);
 
-        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(0.0f,0.0f,-2.0f)).
+        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(0f,0.0f,-2.0f)).
                 rotateX((float)Math.toRadians(xRot)).
-                rotateY((float)Math.toRadians(45)).
-                rotateZ((float)Math.toRadians(45)).
+                rotateY((float)Math.toRadians(yRot)).
+                rotateZ((float)Math.toRadians(zRot)).
                 scale(1.0f));
 
         glBindVertexArray(Mesh_cube.getVAO());
         glEnableVertexAttribArray(0);
-        //glEnableVertexAttribArray(1);
-        //glDrawElements(GL_TRIANGLES, Mesh_quad.getVertexCount(), GL_UNSIGNED_INT, 0);
+//        glEnableVertexAttribArray(1);
+//        glDrawElements(GL_TRIANGLES, Mesh_quad.getVertexCount(), GL_UNSIGNED_INT, 0);
         glBufferData(GL_ARRAY_BUFFER, Mesh_cube.getVAO(), GL_STATIC_DRAW);
         glDrawArrays(GL_TRIANGLES, 0, Mesh_cube.getVertexCount());
         glBindBuffer(GL_ARRAY_BUFFER, 0);

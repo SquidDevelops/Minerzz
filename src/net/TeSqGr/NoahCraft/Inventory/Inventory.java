@@ -13,4 +13,5 @@ public class Inventory {
     private Inventory(int i){
 
     }
+
 }
