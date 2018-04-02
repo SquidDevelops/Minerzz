@@ -1,4 +1,5 @@
 package net.TeSqGr.NoahCraft.World;
+/*
 
 public class Block {
     Block block;
@@ -26,9 +27,11 @@ public class Block {
             case COBBLESTONE:
                 return 5;
                 break;
+            default:
+                return -1;
         }
     }
 }
 public enum Block {
     AIR, DIRT, STONE, GRAVEL, GRASS, COBBLESTONE
-}
+}*/
