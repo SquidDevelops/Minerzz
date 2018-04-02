@@ -3,8 +3,10 @@ package net.TeSqGr.NoahCraft.Rendering;
 
 import net.TeSqGr.NoahCraft.Window.Window;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.CallbackI;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
@@ -16,128 +18,131 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.memFree;
+import java.util.Random;
 
 public class RenderFiller {
 
-    private int vao, vbo;
-    private int vertShader, fragShader, shaderProg;
-    private long context;
+    private Mesh Mesh_triangle, Mesh_quad, Mesh_cube, Mesh_chunk;
 
-    public RenderFiller(long context){
-        this.context = context;
-        glfwMakeContextCurrent(context);
+    private int[] randomChunk = new int[16*16*16];
+
+    private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
+
+    private float aspect;
+
+    private Matrix4f projection;
+
+    float xRot = 0.0f;
+
+    public RenderFiller(Window window){
+
         GL.createCapabilities();
-
-        vertShader = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(vertShader, Shaders.vertShader);
-        glCompileShader(vertShader);
-
-        if (glGetShaderi(vertShader, GL_COMPILE_STATUS) != GL_TRUE) {
-            throw new RuntimeException(glGetShaderInfoLog(vertShader));
+        Shaders.compileShaders();
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        try {
+            Shaders.createUniform("projection");
+            Shaders.createUniform("transform");
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(fragShader, Shaders.fragShader);
-        glCompileShader(fragShader);
+        aspect = (float) window.getWidth()/window.getHeight();
+        projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
 
-        if (glGetShaderi(fragShader, GL_COMPILE_STATUS) != GL_TRUE) {
-            throw new RuntimeException(glGetShaderInfoLog(fragShader));
-        }
+        Mesh_triangle = new Mesh(
+            new float[]{0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f});
 
-        shaderProg = glCreateProgram();
-        glAttachShader(shaderProg, vertShader);
-        glAttachShader(shaderProg, fragShader);
-        //glBindFragDataLocation(shaderProg, 0, "fragC");
-        glLinkProgram(shaderProg);
+        Mesh_quad = new Mesh(QuadVerts.genXYFace(-1.05f));
 
-        if (glGetProgrami(shaderProg, GL_LINK_STATUS) != GL_TRUE) {
-            throw new RuntimeException(glGetProgramInfoLog(shaderProg));
-        }
+        Mesh_cube = new Mesh(generateCube());
 
+        for (int i = 0; i < randomChunk.length; i++)
+            randomChunk[i] = new Random().nextInt(2);
+
+        Mesh_chunk = new Mesh(generateChunkVerts(randomChunk));
 
     }
 
-    public void render(){
+    public void render(Window window){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(shaderProg);
 
-        /*int posAttrib = glGetAttribLocation(shaderProg, "position");
-        glEnableVertexAttribArray(posAttrib);
-        glVertexAttribPointer(posAttrib, 3, GL_FLOAT, false, 6 * 4, 0);
-
-        int colAttrib = glGetAttribLocation(shaderProg, "color");
-        glEnableVertexAttribArray(colAttrib);
-        glVertexAttribPointer(colAttrib, 3, GL_FLOAT, false, 6 * 4, 3 * 4);
-
-        int uniModel = glGetUniformLocation(shaderProg, "model");
-        FloatBuffer model = BufferUtils.createFloatBuffer(16);
-        new Matrix4f().get(model);
-        glUniformMatrix4fv(uniModel, false, model);
-
-        int uniView = glGetUniformLocation(shaderProg, "view");
-        FloatBuffer view = BufferUtils.createFloatBuffer(16);
-        new Matrix4f().get(view);
-        glUniformMatrix4fv(uniView, false, view);
-
-        int uniProjection = glGetUniformLocation(shaderProg, "projection");
-        FloatBuffer projection = BufferUtils.createFloatBuffer(16);
-        new Matrix4f().perspective((float) Math.toRadians(45.0f), 1.0f, 0.01f, 100.0f)
-                .lookAt(0.0f, 0.0f, 10.0f,
-                        0.0f, 0.0f, 0.0f,
-                        0.0f, 1.0f, 0.0f).get(projection);
-        glUniformMatrix4fv(uniProjection, false, projection);*/
-
-        vao = glGenVertexArrays();
-        glBindVertexArray(vao);
-
-        /*try(MemoryStack stack = MemoryStack.stackPush()) {
-            FloatBuffer vertices = stack.mallocFloat(2*3*8);
-            vertices.put(1.0f).put(- 1.0f).put( - 1.0f).put(1.0f).put(0.0f).put(0.0f);
-            vertices.put(1.0f).put(-1.0f).put(1.0f).put(0.0f).put(1.0f).put(0.0f);
-            vertices.put(-1.0f).put(-1.0f).put(1.0f).put(0.0f).put(0.0f).put( 1.0f);
-            vertices.put(-1.0f).put(-1.0f).put(-1.0f).put(1.0f).put(1.0f).put(0.0f);
-            vertices.put(1.0f).put(1.0f).put(-1.0f).put(1.0f).put(0.0f).put(1.0f);
-            vertices.put(1.0f).put(1.0f).put(1.0f).put(0.0f).put(1.0f).put(1.0f);
-            vertices.put(-1.0f).put(1.0f).put(1.0f).put(0.0f).put(0.0f).put(0.0f);
-            vertices.put(-1.0f).put(1.0f).put(-1.0f).put(1.0f).put(1.0f).put(1.0f);
-            vertices.flip();
-
-            vbo = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-        }*/
-        FloatBuffer vertices;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            vertices = stack.mallocFloat(3 * 3);
-            vertices.put(-0.6f).put(-0.4f).put(0f);
-            vertices.put(0.6f).put(-0.4f).put(0f);
-            vertices.put(0f).put(0.6f).put(0f);
-            vertices.flip();
-
-            vbo = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-            memFree(vertices);
+        if (window.isResized()){
+            glViewport(0, 0, window.getWidth(), window.getHeight());
+            window.setResized(false);
+            aspect = (float) window.getWidth()/window.getHeight();
+            projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        //glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        xRot += 0.01f;
 
+        Shaders.bind();
+
+        Shaders.setUniform("projection", projection);
+
+        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(0.0f,0.0f,-2.0f)).
+                rotateX((float)Math.toRadians(xRot)).
+                rotateY((float)Math.toRadians(45)).
+                rotateZ((float)Math.toRadians(45)).
+                scale(1.0f));
+
+        glBindVertexArray(Mesh_cube.getVAO());
+        glEnableVertexAttribArray(0);
+        //glEnableVertexAttribArray(1);
+        //glDrawElements(GL_TRIANGLES, Mesh_quad.getVertexCount(), GL_UNSIGNED_INT, 0);
+        glBufferData(GL_ARRAY_BUFFER, Mesh_cube.getVAO(), GL_STATIC_DRAW);
+        glDrawArrays(GL_TRIANGLES, 0, Mesh_cube.getVertexCount());
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        if (vertices != null) {
-            MemoryUtil.memFree(vertices);
+        Shaders.unbind();
+
+    }
+
+    public float[] generateChunkVerts(int[] chunk){
+        float[] chunkV = new float[16*16*16*18*6];
+        int size = 0, coord = 0;
+        for(int block : chunk){
+            if(block != 0){
+                System.arraycopy(QuadVerts.genXYFace(((float)coord%16)+0.5f),0, chunkV, size, 18);
+                size+=18;
+                System.arraycopy(QuadVerts.genXYFace(((float)coord%16)-0.5f), 0, chunkV, size, 18);
+                size+=18;
+                System.arraycopy(QuadVerts.genYZFace(((float)(coord/16))+0.5f),0, chunkV, size, 18);
+                size+=18;
+                System.arraycopy(QuadVerts.genYZFace(((float)(coord/16))-0.5f),0, chunkV, size, 18);
+                size+=18;
+                System.arraycopy(QuadVerts.genXZFace(((float)(coord/256))+0.5f),0, chunkV, size, 18);
+                size+=18;
+                System.arraycopy(QuadVerts.genXZFace(((float)(coord/256))-0.5f),0, chunkV, size, 18);
+                size+=18;
+            }
+            coord++;
         }
+        float[] chunkVFinal = new float[size];
+        System.arraycopy(chunkV, 0, chunkVFinal, 0, size);
+        return chunkVFinal;
+    }
+
+    public float[] generateCube(){
+        float[] cube = new float[18*6];
+        System.arraycopy(QuadVerts.genXYFace(0.5f), 0, cube, 0, 18);
+        System.arraycopy(QuadVerts.genXYFace(-0.5f), 0, cube, 18, 18);
+        System.arraycopy(QuadVerts.genYZFace(0.5f), 0, cube, 18*2, 18);
+        System.arraycopy(QuadVerts.genYZFace(-0.5f), 0, cube, 18*3, 18);
+        System.arraycopy(QuadVerts.genXZFace(0.5f), 0, cube, 18*4, 18);
+        System.arraycopy(QuadVerts.genXZFace(-0.5f), 0, cube, 18*5, 18);
+        return cube;
     }
 
     public void dispose(){
-        glDeleteVertexArrays(vao);
-        glDeleteBuffers(vbo);
-        glDeleteShader(vertShader);
-        glDeleteShader(fragShader);
-        glDeleteProgram(shaderProg);
+        glDisableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        Mesh_triangle.dispose();
+        Mesh_chunk.dispose();
+        Mesh_quad.dispose();
+        Mesh_cube.dispose();
+        Shaders.dispose();
     }
 
 }

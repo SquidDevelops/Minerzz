@@ -10,7 +10,15 @@ public class Window {
 
     private long window;
 
+    private int width, height;
+
+    private boolean resized = false;
+
     public Window(int width, int height, String title){
+
+        this.height = height;
+        this.width = width;
+
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -23,9 +31,20 @@ public class Window {
 
         window = glfwCreateWindow(width, height, title, NULL, NULL);
 
+        glfwSetFramebufferSizeCallback(window, (window, _width, _height) -> {
+            this.width = _width;
+            this.height = _height;
+            this.setResized(true);
+        });
+
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         int x = (vidmode.width() - width) / 2;
         int y = (vidmode.height() - height) / 2;
+
+        glfwMakeContextCurrent(window);
+
+        glfwSwapInterval(1);
+
         glfwSetWindowPos(window, x, y);
     }
 
@@ -56,4 +75,19 @@ public class Window {
         return window;
     }
 
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public boolean isResized(){
+        return resized;
+    }
+
+    public void setResized(boolean resized){
+        this.resized = resized;
+    }
 }

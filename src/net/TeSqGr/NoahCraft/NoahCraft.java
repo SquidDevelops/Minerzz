@@ -43,7 +43,7 @@ public class NoahCraft {
         glfwSetErrorCallback(errorCallback = createPrint(System.err));
         glfwInit();
         window = new Window(640, 480,"NoahCraft");
-        renderer = new RenderFiller(window.getContext());
+        renderer = new RenderFiller(window);
         timer = new Timing();
         window.visible(true);
     }
@@ -58,6 +58,7 @@ public class NoahCraft {
         double delta, accumulator = 0.0, interval = 1.0/20.0, alpha;
         timer.init();
         while(!window.shouldClose()){
+            timer.update();
             delta = timer.delta();
             accumulator += delta;
             input();
@@ -66,6 +67,7 @@ public class NoahCraft {
                 accumulator -= interval;
             }
             render();
+            System.out.println("FPS:" + timer.getFPS());
         }
     }
 
@@ -78,7 +80,7 @@ public class NoahCraft {
     }
 
     public void render(){
-        renderer.render();
+        renderer.render(window);
         window.render();
         timer.updateFPS();
     }
