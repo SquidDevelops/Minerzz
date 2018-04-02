@@ -8,7 +8,7 @@ public class PlayerManager {
     }
 
     public void applyDamage(float damage ,Player p) {
-
+        //TODO: Add apply damage logic
     }
 
     public void movePlayer(float x, Player p) {
