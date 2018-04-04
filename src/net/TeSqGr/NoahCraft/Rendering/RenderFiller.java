@@ -14,15 +14,22 @@ import java.nio.FloatBuffer;
 
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.system.MemoryUtil.memFree;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RenderFiller {
 
     private Mesh Mesh_triangle, Mesh_quad, Mesh_cube, Mesh_chunk;
+
+    private Texture texture;
 
     private int[] randomChunk = new int[16*16*16];
 
@@ -34,36 +41,36 @@ public class RenderFiller {
 
     float xRot = 0.0f;
 
-    float yRot = 0.0f;
-
-    float zRot = 0.0f;
+    private List<Mesh> meshes = new ArrayList<>();
 
     public RenderFiller(Window window){
-
         GL.createCapabilities();
         Shaders.compileShaders();
-//        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        glEnable(GL_DEPTH_TEST);
+        //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         try {
             Shaders.createUniform("projection");
             Shaders.createUniform("transform");
+            Shaders.createUniform("textureSampler");
         }catch (Exception e){
             e.printStackTrace();
         }
 
+        glActiveTexture(GL_TEXTURE0);
+        texture = new Texture("texture.png");
+
         aspect = (float) window.getWidth()/window.getHeight();
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
 
-        Mesh_triangle = new Mesh(
-            new float[]{0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f});
+        //Mesh_cube = new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture);
 
-        Mesh_quad = new Mesh(QuadVerts.genXYFace(-1.05f));
-
-        Mesh_cube = new Mesh(generateCube());
+        meshes.add(new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture));
+        meshes.add(new Mesh(CubeData.positions2, CubeData.textCoords, CubeData.indices, texture));
 
         for (int i = 0; i < randomChunk.length; i++)
             randomChunk[i] = new Random().nextInt(2);
 
-        Mesh_chunk = new Mesh(generateChunkVerts(randomChunk));
+       // Mesh_chunk = new Mesh(generateChunkVerts(randomChunk));
 
     }
 
@@ -77,31 +84,21 @@ public class RenderFiller {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        xRot += 1f;
-
-        yRot += 0f;
-
-        zRot += 0f;
-
+        xRot += 0.01f;
 
         Shaders.bind();
 
         Shaders.setUniform("projection", projection);
-
-        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(0f,0.0f,-2.0f)).
+        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(0.0f,0.0f,-2.0f)).
                 rotateX((float)Math.toRadians(xRot)).
-                rotateY((float)Math.toRadians(yRot)).
-                rotateZ((float)Math.toRadians(zRot)).
+                rotateY((float)Math.toRadians(45)).
+                rotateZ((float)Math.toRadians(45)).
                 scale(1.0f));
+        Shaders.setUniform("textureSampler", 0);
 
-        glBindVertexArray(Mesh_cube.getVAO());
-        glEnableVertexAttribArray(0);
-//        glEnableVertexAttribArray(1);
-//        glDrawElements(GL_TRIANGLES, Mesh_quad.getVertexCount(), GL_UNSIGNED_INT, 0);
-        glBufferData(GL_ARRAY_BUFFER, Mesh_cube.getVAO(), GL_STATIC_DRAW);
-        glDrawArrays(GL_TRIANGLES, 0, Mesh_cube.getVertexCount());
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+
+        for( Mesh cube : meshes )
+            cube.render();
 
         Shaders.unbind();
 
@@ -147,10 +144,9 @@ public class RenderFiller {
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-        Mesh_triangle.dispose();
-        Mesh_chunk.dispose();
-        Mesh_quad.dispose();
-        Mesh_cube.dispose();
+        for (Mesh cube : meshes)
+            cube.dispose();
+        texture.dispose();
         Shaders.dispose();
     }
 

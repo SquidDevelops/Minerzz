@@ -20,17 +20,23 @@ public class Shaders {
     private static final CharSequence vertShaderCS =
             "#version 330\n" +
                     "layout (location=0) in vec3 position;" +
+                    "layout (location=1) in vec2 texCoord;" +
+                    "out vec2 texCoord2;" +
                     "uniform mat4 projection;" +
                     "uniform mat4 transform;" +
                     "void main(){" +
                         "gl_Position = projection * transform * vec4(position, 1.0);" +
+                        "texCoord2 = texCoord;" +
                     "}";
 
     private static final CharSequence fragShaderCS =
             "#version 330\n" +
+                    "in vec2 texCoord2;" +
                     "out vec4 fragC;" +
+                    "uniform sampler2D textureSampler;" +
                     "void main(){" +
-                        "fragC = vec4(0.0, 0.5, 0.5, 1.0);" +
+                        "fragC = texture(textureSampler, texCoord2);" +
+                    //"fragC = vec4(255, 0, 0, 0);" +
                     "}";
 
     public static void compileShaders() {
@@ -90,6 +96,10 @@ public class Shaders {
             value.get(fb);
             glUniformMatrix4fv(uniforms.get(uniformName), false, fb);
         }
+    }
+
+    public static void setUniform(String uniformName, int value) {
+        glUniform1i(uniforms.get(uniformName), value);
     }
 
     public static void dispose(){
