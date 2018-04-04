@@ -7,8 +7,18 @@ public class PlayerManager {
         return new Coordinate(0, 0, 0);
     }
 
-    public void applyDamage(float damage ,Player p) {
-        //TODO: Add apply damage logic
+    public void applyDamage(float damage, Player p) {
+        float change = p.getHealth() - damage;
+        if (change > 0)
+            p.setHealth(p.getHealth() - damage);
+        else ;
+        //TODO: Cause the players untimely death :(
+
+
+    }
+
+    public void causeDeath() {
+        //TODO: Death Mechanics
     }
 
     public void movePlayer(float x, Player p) {

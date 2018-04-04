@@ -11,6 +11,16 @@ public abstract class Entity {
 
     int entityID;
 
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+    }
+
+    float health = 20f;
+
     public float getX() {
         return x;
     }
