@@ -1,6 +1,0 @@
-package net.TeSqGr.NoahCraft.World;
-
-public enum Block {
-    AIR, DIRT, GRASS, STONE, COBBLESTONE, WOOD, BEDROCK, WOODPLANKS,
-    SAND, GLASS, WOOL, BRICKS, OBSIDIAN, ICE, SNOW, CLAY
-}
