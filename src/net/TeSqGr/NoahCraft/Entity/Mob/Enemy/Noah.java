@@ -2,7 +2,7 @@ package net.TeSqGr.NoahCraft.Entity.Mob.Enemy;
 
 import net.TeSqGr.NoahCraft.Entity.Entity;
 
-/*public class Noah implements Entity {
+public class Noah implements Entity {
     @Override
     public void update() {
 
@@ -17,4 +17,4 @@ import net.TeSqGr.NoahCraft.Entity.Entity;
     public void nonRenderTick() {
 
     }
-}*/
+}
