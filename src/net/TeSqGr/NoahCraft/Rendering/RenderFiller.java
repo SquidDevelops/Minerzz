@@ -31,7 +31,7 @@ public class RenderFiller {
 
     private Texture texture;
 
-    private int[] randomChunk = new int[16*16*16];
+    private int[] randomChunk = new int[16*256*16];
 
     private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
 
@@ -64,14 +64,15 @@ public class RenderFiller {
 
         //Mesh_cube = new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture);
 
-        meshes.add(new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture));
-        meshes.add(new Mesh(CubeData.positions2, CubeData.textCoords, CubeData.indices, texture));
+        //meshes.add(new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture));
+        //meshes.add(new Mesh(CubeData.positions2, CubeData.textCoords, CubeData.indices, texture));
 
         for (int i = 0; i < randomChunk.length; i++)
             randomChunk[i] = new Random().nextInt(2);
 
-       // Mesh_chunk = new Mesh(generateChunkVerts(randomChunk));
-
+        RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0);
+       Mesh_chunk = new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture );
+        meshes.add(Mesh_chunk);
     }
 
     public void render(Window window){
@@ -89,7 +90,7 @@ public class RenderFiller {
         Shaders.bind();
 
         Shaders.setUniform("projection", projection);
-        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(0.0f,0.0f,-2.0f)).
+        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(-8.0f,0.0f,-30.0f)).
                 rotateX((float)Math.toRadians(xRot)).
                 rotateY((float)Math.toRadians(45)).
                 rotateZ((float)Math.toRadians(45)).
