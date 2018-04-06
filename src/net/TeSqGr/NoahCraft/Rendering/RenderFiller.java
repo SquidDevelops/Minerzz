@@ -91,9 +91,7 @@ public class RenderFiller {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        xRot += 1.0f;
-        zRot += 0.1f;
-translation.rotateX((float)Math.toRadians(1.0));
+        translation.rotateY((float)Math.toRadians(1.0));
 
         Shaders.bind();
 
@@ -109,41 +107,7 @@ translation.rotateX((float)Math.toRadians(1.0));
 
     }
 
-    public float[] generateChunkVerts(int[] chunk){
-        float[] chunkV = new float[16*16*16*18*6];
-        int size = 0, coord = 0;
-        for(int block : chunk){
-            if(block != 0){
-                System.arraycopy(QuadVerts.genXYFace(((float)coord%16)+0.5f),0, chunkV, size, 18);
-                size+=18;
-                System.arraycopy(QuadVerts.genXYFace(((float)coord%16)-0.5f), 0, chunkV, size, 18);
-                size+=18;
-                System.arraycopy(QuadVerts.genYZFace(((float)(coord/16))+0.5f),0, chunkV, size, 18);
-                size+=18;
-                System.arraycopy(QuadVerts.genYZFace(((float)(coord/16))-0.5f),0, chunkV, size, 18);
-                size+=18;
-                System.arraycopy(QuadVerts.genXZFace(((float)(coord/256))+0.5f),0, chunkV, size, 18);
-                size+=18;
-                System.arraycopy(QuadVerts.genXZFace(((float)(coord/256))-0.5f),0, chunkV, size, 18);
-                size+=18;
-            }
-            coord++;
-        }
-        float[] chunkVFinal = new float[size];
-        System.arraycopy(chunkV, 0, chunkVFinal, 0, size);
-        return chunkVFinal;
-    }
 
-    public float[] generateCube(){
-        float[] cube = new float[18*6];
-        System.arraycopy(QuadVerts.genXYFace(0.5f), 0, cube, 0, 18);
-        System.arraycopy(QuadVerts.genXYFace(-0.5f), 0, cube, 18, 18);
-        System.arraycopy(QuadVerts.genYZFace(0.5f), 0, cube, 18*2, 18);
-        System.arraycopy(QuadVerts.genYZFace(-0.5f), 0, cube, 18*3, 18);
-        System.arraycopy(QuadVerts.genXZFace(0.5f), 0, cube, 18*4, 18);
-        System.arraycopy(QuadVerts.genXZFace(-0.5f), 0, cube, 18*5, 18);
-        return cube;
-    }
 
     public void dispose(){
         glDisableVertexAttribArray(0);
