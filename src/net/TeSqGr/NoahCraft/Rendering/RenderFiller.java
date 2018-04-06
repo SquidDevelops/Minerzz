@@ -39,7 +39,7 @@ public class RenderFiller {
 
     private Matrix4f projection;
 
-    float xRot = 0.0f;
+    float xRot = 0.0f, zRot = 0.0f;
 
     private List<Mesh> meshes = new ArrayList<>();
 
@@ -85,21 +85,22 @@ public class RenderFiller {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        xRot += 0.01f;
+        xRot += 1.0f;
+        zRot += 0.1f;
 
         Shaders.bind();
 
         Shaders.setUniform("projection", projection);
-        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(-8.0f,0.0f,-30.0f)).
-                rotateX((float)Math.toRadians(xRot)).
-                rotateY((float)Math.toRadians(45)).
-                rotateZ((float)Math.toRadians(45)).
+        Shaders.setUniform("transform", new Matrix4f().identity().translate(new Vector3f(-8.0f,-16.0f,-30.0f)).
+                rotateX((float)Math.toRadians(0.0f)).
+                rotateY((float)Math.toRadians(zRot)).
+                rotateZ((float)Math.toRadians(0.0f)).
                 scale(1.0f));
         Shaders.setUniform("textureSampler", 0);
 
 
-        for( Mesh cube : meshes )
-            cube.render();
+        for( Mesh chunk : meshes )
+            chunk.render();
 
         Shaders.unbind();
 
