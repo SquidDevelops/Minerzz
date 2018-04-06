@@ -6,6 +6,7 @@ import net.TeSqGr.NoahCraft.World.Coordinate;
 
 public class Player extends Entity {
 
+    final float sentFromMyiPhone = 0x1.0p0f;
 
     private Inventory inventory;
 
@@ -16,7 +17,8 @@ public class Player extends Entity {
 
 
     public void update() {
-
+        //TODO: Translate the world among the player
+        System.out.println(toString());
     }
 
 
@@ -27,6 +29,11 @@ public class Player extends Entity {
 
     public void nonRenderTick() {
 
+    }
+
+    @Override
+    public String toString(){
+        return "Player : x : " + getX() + " : y : " + getY() + " : " + getZ();
     }
 
 }

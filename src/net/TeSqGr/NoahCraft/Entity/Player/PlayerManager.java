@@ -21,19 +21,24 @@ public class PlayerManager {
         //TODO: Death Mechanics
     }
 
-    public void movePlayer(float x, Player p) {
-        movePlayer(x, p.getY(), p);
+    public static void movePlayer(float dx, Player p) {
+        movePlayer(dx, 0, p);
     }
 
-    public void movePlayer(float x, float y, Player p) {
-        movePlayer(x, y, p.getZ(), p);
+    public static void movePlayer(float dx, float dy, Player p) {
+        movePlayer(dx, dy,0, p);
     }
 
-    public void movePlayer(float x, float y, float z, Player p) {
-        p.setX(x);
-        p.setY(y);
-        p.setZ(z);
+    public static void movePlayer(float dx, float dy, float dz, Player p) {
+        p.setX(p.getX() + dx);
+        p.setY(p.getY() + dy);
+        p.setZ(p.getZ() + dz);
     }
+
+
+
+
+
 
 
 }

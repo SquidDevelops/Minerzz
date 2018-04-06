@@ -2,6 +2,7 @@ package net.TeSqGr.NoahCraft;
 
 import java.util.logging.Logger;
 
+import net.TeSqGr.NoahCraft.Entity.Player.Player;
 import net.TeSqGr.NoahCraft.Rendering.RenderFiller;
 import net.TeSqGr.NoahCraft.Timing.Timing;
 import net.TeSqGr.NoahCraft.Window.Window;
@@ -11,6 +12,7 @@ import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import net.TeSqGr.NoahCraft.World.Coordinate;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 public class NoahCraft {
@@ -21,6 +23,7 @@ public class NoahCraft {
     public Window window;
     public RenderFiller renderer;
     public Timing timer;
+    public Player testPlayer = new Player(1, new Coordinate(0,0,0));
 
     public static void main(String[] args) {
         new NoahCraft();
@@ -82,6 +85,7 @@ public class NoahCraft {
     public void render(){
         renderer.render(window);
         window.render();
+        testPlayer.update();
         timer.updateFPS();
     }
 
