@@ -18,7 +18,7 @@ public class Player extends Entity {
 
     public void update() {
         //TODO: Translate the world among the player
-        System.out.println(toString());
+//        System.out.println(toString());
     }
 
 
