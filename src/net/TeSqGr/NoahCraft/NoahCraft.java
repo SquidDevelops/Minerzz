@@ -15,6 +15,7 @@ import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import net.TeSqGr.NoahCraft.World.Coordinate;
+import net.TeSqGr.NoahCraft.World.WorldFiller;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
@@ -29,6 +30,9 @@ public class NoahCraft {
     public Timing timer;
     public Input input;
     public Player testPlayer = new Player(1, new Coordinate(0,0,0));
+
+    //DELET THIS
+    WorldFiller w = new WorldFiller();
 
     public static void main(String[] args) {
         new NoahCraft();
