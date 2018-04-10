@@ -18,6 +18,12 @@ public class Input {
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_D)) {
             NoahCraft.instance.renderer.setdX(-0.5f);
         }
+
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_Q)) {
+            NoahCraft.instance.renderer.setdRY(0.5f);
+        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_E)) {
+            NoahCraft.instance.renderer.setdRY(-0.5f);
+        }
     }
 
 }
