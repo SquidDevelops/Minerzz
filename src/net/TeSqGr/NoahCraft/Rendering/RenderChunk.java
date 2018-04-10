@@ -25,7 +25,7 @@ public class RenderChunk {
                                 chunkI[iSize++] = i + vSize;
                             }
                             for (int i = 0; i < 6; i++){
-                                chunkV[vSize++] = YZ[i*3] + 0.5f + x + offsetX;
+                                chunkV[vSize++] = YZ[i*3] - 0.5f + x + offsetX;
                                 chunkV[vSize++] = YZ[i*3+1] + y;
                                 chunkV[vSize++] = YZ[i*3+2] + z + offsetZ;
                             }
@@ -35,7 +35,7 @@ public class RenderChunk {
                             chunkI[iSize++] = i + vSize;
                         }
                         for (int i = 0; i < 6; i++) {
-                            chunkV[vSize++] = YZ[i * 3] + 0.5f + x + offsetX;
+                            chunkV[vSize++] = YZ[i * 3] - 0.5f + x + offsetX;
                             chunkV[vSize++] = YZ[i * 3 + 1] + y;
                             chunkV[vSize++] = YZ[i * 3 + 2] + z + offsetZ;
                         }
@@ -48,7 +48,7 @@ public class RenderChunk {
                                 chunkI[iSize++] = i + vSize;
                             }
                             for (int i = 0; i < 6; i++){
-                                chunkV[vSize++] = YZ[i*3] - 0.5f + x + offsetX;
+                                chunkV[vSize++] = YZ[i*3] + 0.5f + x + offsetX;
                                 chunkV[vSize++] = YZ[i*3+1] + y;
                                 chunkV[vSize++] = YZ[i*3+2] + z + offsetZ;
                             }
@@ -58,7 +58,7 @@ public class RenderChunk {
                             chunkI[iSize++] = i + vSize;
                         }
                         for (int i = 0; i < 6; i++){
-                            chunkV[vSize++] = YZ[i*3] - 0.5f + x + offsetX;
+                            chunkV[vSize++] = YZ[i*3] + 0.5f + x + offsetX;
                             chunkV[vSize++] = YZ[i*3+1] + y;
                             chunkV[vSize++] = YZ[i*3+2] + z + offsetZ;
                         }
@@ -67,29 +67,6 @@ public class RenderChunk {
                     if (z > 0){
                         if (chunk[(y*16*16)+(z*(16-1))+x] == 0){
                             //make front XY face
-                            for(int i=0; i<6; i++){
-                                chunkI[iSize++] = i + vSize;
-                            }
-                            for (int i = 0; i < 6; i++){
-                                chunkV[vSize++] = XY[i*3] + x + offsetX;
-                                chunkV[vSize++] = XY[i*3+1] + y;
-                                chunkV[vSize++] = XY[i*3+2] + 0.5f + z + offsetZ;
-                            }
-                        }
-                    } else {
-                        for(int i=0; i<6; i++){
-                            chunkI[iSize++] = i + vSize;
-                        }
-                        for (int i = 0; i < 6; i++){
-                            chunkV[vSize++] = XY[i*3] + x + offsetX;
-                            chunkV[vSize++] = XY[i*3+1] + y;
-                            chunkV[vSize++] = XY[i*3+2] + 0.5f + z + offsetZ;
-                        }
-                        counter++;
-                    }
-                    if (z < 15){
-                        if (chunk[(y*16*16)+(z*(16+1))+x] == 0){
-                            //make back XY face
                             for(int i=0; i<6; i++){
                                 chunkI[iSize++] = i + vSize;
                             }
@@ -110,16 +87,16 @@ public class RenderChunk {
                         }
                         counter++;
                     }
-                    if (y > 0){
-                        if (chunk[(y*((16*16)-1))+(z*16)+x] == 0){
-                            //make bottom XZ face
+                    if (z < 15){
+                        if (chunk[(y*16*16)+(z*(16+1))+x] == 0){
+                            //make back XY face
                             for(int i=0; i<6; i++){
                                 chunkI[iSize++] = i + vSize;
                             }
                             for (int i = 0; i < 6; i++){
-                                chunkV[vSize++] = XZ[i*3] + x + offsetX;
-                                chunkV[vSize++] = XZ[i*3+1] + 0.5f + y;
-                                chunkV[vSize++] = XZ[i*3+2] + z + offsetZ;
+                                chunkV[vSize++] = XY[i*3] + x + offsetX;
+                                chunkV[vSize++] = XY[i*3+1] + y;
+                                chunkV[vSize++] = XY[i*3+2] + 0.5f + z + offsetZ;
                             }
                         }
                     } else {
@@ -127,15 +104,15 @@ public class RenderChunk {
                             chunkI[iSize++] = i + vSize;
                         }
                         for (int i = 0; i < 6; i++){
-                            chunkV[vSize++] = XZ[i*3] + x + offsetX;
-                            chunkV[vSize++] = XZ[i*3+1] + 0.5f + y;
-                            chunkV[vSize++] = XZ[i*3+2] + z + offsetZ;
+                            chunkV[vSize++] = XY[i*3] + x + offsetX;
+                            chunkV[vSize++] = XY[i*3+1] + y;
+                            chunkV[vSize++] = XY[i*3+2] + 0.5f + z + offsetZ;
                         }
                         counter++;
                     }
-                    if (y < 255){
-                        if (chunk[(y*((16*16)+1))+(z*16)+x] == 0){
-                            //make top XZ face
+                    if (y > 0){
+                        if (chunk[(y*((16*16)-1))+(z*16)+x] == 0){
+                            //make bottom XZ face
                             for(int i=0; i<6; i++){
                                 chunkI[iSize++] = i + vSize;
                             }
@@ -152,6 +129,29 @@ public class RenderChunk {
                         for (int i = 0; i < 6; i++){
                             chunkV[vSize++] = XZ[i*3] + x + offsetX;
                             chunkV[vSize++] = XZ[i*3+1] - 0.5f + y;
+                            chunkV[vSize++] = XZ[i*3+2] + z + offsetZ;
+                        }
+                        counter++;
+                    }
+                    if (y < 255){
+                        if (chunk[(y*((16*16)+1))+(z*16)+x] == 0){
+                            //make top XZ face
+                            for(int i=0; i<6; i++){
+                                chunkI[iSize++] = i + vSize;
+                            }
+                            for (int i = 0; i < 6; i++){
+                                chunkV[vSize++] = XZ[i*3] + x + offsetX;
+                                chunkV[vSize++] = XZ[i*3+1] + 0.5f + y;
+                                chunkV[vSize++] = XZ[i*3+2] + z + offsetZ;
+                            }
+                        }
+                    } else {
+                        for(int i=0; i<6; i++){
+                            chunkI[iSize++] = i + vSize;
+                        }
+                        for (int i = 0; i < 6; i++){
+                            chunkV[vSize++] = XZ[i*3] + x + offsetX;
+                            chunkV[vSize++] = XZ[i*3+1] + 0.5f + y;
                             chunkV[vSize++] = XZ[i*3+2] + z + offsetZ;
                         }
                         counter++;
