@@ -3,6 +3,7 @@ package net.TeSqGr.NoahCraft;
 import java.util.logging.Logger;
 
 import net.TeSqGr.NoahCraft.Entity.Player.Player;
+import net.TeSqGr.NoahCraft.Input.Input;
 import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Rendering.RenderFiller;
 import net.TeSqGr.NoahCraft.Timing.Timing;
@@ -26,6 +27,7 @@ public class NoahCraft {
     public Window window;
     public RenderFiller renderer;
     public Timing timer;
+    public Input input;
     public Player testPlayer = new Player(1, new Coordinate(0,0,0));
 
     public static void main(String[] args) {
@@ -53,6 +55,7 @@ public class NoahCraft {
 
         renderer = new RenderFiller(window);
         timer = new Timing();
+        input = new Input();
         window.visible(true);
     }
 
@@ -81,6 +84,7 @@ public class NoahCraft {
 
     public void input(){
         glfwPollEvents();
+        input.update();
     }
 
     public void update(double delta){

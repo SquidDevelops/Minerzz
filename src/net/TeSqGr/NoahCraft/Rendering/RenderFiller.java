@@ -106,9 +106,11 @@ public class RenderFiller {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        translation.translation(dX, dY, dZ);
-
-        translation.rotateY((float) Math.toRadians(1.0));
+        translation.translate(dX, dY, dZ);
+        dX = 0;
+        dY = 0;
+        dZ = 0;
+//        translation.rotateY((float) Math.toRadians(1.0));
 
         Shaders.bind();
 
