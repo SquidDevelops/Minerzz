@@ -1,5 +1,6 @@
 package net.TeSqGr.NoahCraft.Window;
 
+import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import org.lwjgl.glfw.*;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -11,6 +12,8 @@ public class Window {
     private long window;
 
     private int width, height;
+
+    private GLFWKeyCallback keyCallback;
 
     private boolean resized = false;
 
@@ -37,6 +40,8 @@ public class Window {
             this.setResized(true);
         });
 
+        glfwSetKeyCallback(window, keyCallback = new KeyboardHandler());
+
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         int x = (vidmode.width() - width) / 2;
         int y = (vidmode.height() - height) / 2;
@@ -49,6 +54,7 @@ public class Window {
     }
 
     public void dispose(){
+        keyCallback.free();
         glfwDestroyWindow(window);
     }
 

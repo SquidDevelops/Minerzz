@@ -3,6 +3,7 @@ package net.TeSqGr.NoahCraft;
 import java.util.logging.Logger;
 
 import net.TeSqGr.NoahCraft.Entity.Player.Player;
+import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Rendering.RenderFiller;
 import net.TeSqGr.NoahCraft.Timing.Timing;
 import net.TeSqGr.NoahCraft.Window.Window;
@@ -14,12 +15,14 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import net.TeSqGr.NoahCraft.World.Coordinate;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class NoahCraft {
 
     public Logger noahLogger = Logger.getLogger("Noah L");
 
     public GLFWErrorCallback errorCallback;
+
     public Window window;
     public RenderFiller renderer;
     public Timing timer;
@@ -44,8 +47,10 @@ public class NoahCraft {
 
     public void init(){
         glfwSetErrorCallback(errorCallback = createPrint(System.err));
+
         glfwInit();
         window = new Window(640, 480,"NoahCraft");
+
         renderer = new RenderFiller(window);
         timer = new Timing();
         window.visible(true);
