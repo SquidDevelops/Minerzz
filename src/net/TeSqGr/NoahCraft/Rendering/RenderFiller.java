@@ -56,7 +56,12 @@ public class RenderFiller {
     }
 
     private float dX = 0, dY = 0, dZ = 0;
-    float xRot = 0.0f, zRot = 0.0f;
+
+    public void setdRY(float dRY) {
+        this.dRY = dRY;
+    }
+
+    private float dRY = 0;
 
     private List<Mesh> meshes = new ArrayList<>();
 
@@ -80,7 +85,7 @@ public class RenderFiller {
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         translation = new Matrix4f().translation(new Vector3f(-8.0f, -16.0f, -30.0f)).
                 rotateX((float) Math.toRadians(0.0f)).
-                rotateY((float) Math.toRadians(zRot)).
+                rotateY((float) Math.toRadians(0.0f)).
                 rotateZ((float) Math.toRadians(0.0f)).
                 scale(1.0f);
         //Mesh_cube = new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture);
@@ -107,9 +112,11 @@ public class RenderFiller {
         }
 
         translation.translate(dX, dY, dZ);
+        projection.rotateY((float)Math.toRadians((dRY)));
         dX = 0;
         dY = 0;
         dZ = 0;
+        dRY = 0;
 //        translation.rotateY((float) Math.toRadians(1.0));
 
         Shaders.bind();
