@@ -33,7 +33,7 @@ public class RenderFiller {
 
     private Texture texture;
 
-    private int[] randomChunk = new int[16 * 256 * 16], solidChunk = new int[16 * 256 * 16];
+    private int[] randomChunk = new int[16 * 256 * 16], solidChunk = new int[16 * 256 * 16], oneBlockChunk = new int[16 * 256 * 16];
 
     private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
 
@@ -102,15 +102,19 @@ public class RenderFiller {
         for (int i = 0; i < randomChunk.length; i++)
             randomChunk[i] = new Random().nextInt(2);
 
-        RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0);
+        RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0, texture.size);
         Mesh_chunk = new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture);
         meshes.add(Mesh_chunk);
 
         for (int i = 0; i < solidChunk.length; i++)
             solidChunk[i] = 1;
 
-        RenderChunk renderChunk2 = new RenderChunk(solidChunk, 2, 0);
+        RenderChunk renderChunk2 = new RenderChunk(solidChunk, 2, 0, texture.size);
         meshes.add(new Mesh(renderChunk2.getVertices(), renderChunk2.getTexCoords(), renderChunk2.getIndices(), texture));
+
+        oneBlockChunk[20] = 1;
+        RenderChunk renderChunk3 = new RenderChunk(oneBlockChunk, 4, 0, texture.size);
+        meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));
     }
 
     public void render(Window window) {

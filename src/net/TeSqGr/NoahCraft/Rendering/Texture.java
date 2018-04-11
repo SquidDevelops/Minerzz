@@ -11,10 +11,13 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 public class Texture {
 
     private int tID;
+    public int size;
 
     public Texture(String file) {
         try {
             PNGDecoder decoder = new PNGDecoder(Texture.class.getResourceAsStream(file));
+
+            size = decoder.getWidth();
 
             ByteBuffer buf = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
             decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
