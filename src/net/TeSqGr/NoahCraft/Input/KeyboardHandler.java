@@ -14,6 +14,7 @@ public class KeyboardHandler extends GLFWKeyCallback {
     @Override
     public void invoke(long window, int key, int scancode, int action, int mods) {
         // TODO Auto-generated method stub
+        if(key >= 0)
         keys[key] = action != GLFW_RELEASE;
     }
 
