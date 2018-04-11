@@ -8,34 +8,42 @@ public class Input {
 
     public void update() {
         if (KeyboardHandler.isKeyDown(GLFW_KEY_W)) {
-            NoahCraft.instance.renderer.setdZ(0.5f);
+            NoahCraft.instance.renderer.setdZ(1f);
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_S)) {
-            NoahCraft.instance.renderer.setdZ(-0.5f);
+            NoahCraft.instance.renderer.setdZ(-1f);
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_A)) {
-            NoahCraft.instance.renderer.setdX(0.5f);
+            NoahCraft.instance.renderer.setdX(1f);
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_D)) {
-            NoahCraft.instance.renderer.setdX(-0.5f);
+            NoahCraft.instance.renderer.setdX(-1f);
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT)) {
-            NoahCraft.instance.renderer.setdRY(-0.5f);
+            NoahCraft.instance.renderer.setdRY(-1f);
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_RIGHT)) {
-            NoahCraft.instance.renderer.setdRY(0.5f);
+            NoahCraft.instance.renderer.setdRY(1f);
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_UP)) {
-            NoahCraft.instance.renderer.setdRX(-0.5f);
+            NoahCraft.instance.renderer.setdRX(-1f);
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_DOWN)) {
-            NoahCraft.instance.renderer.setdRX(0.5f);
+            NoahCraft.instance.renderer.setdRX(1f);
+        }
+
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_Q)) {
+            NoahCraft.instance.renderer.setdRX(-1f);
+        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_E)) {
+            NoahCraft.instance.renderer.setdRX(1f);
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_SPACE)) {
-            NoahCraft.instance.renderer.setdY(-0.5f);
+            NoahCraft.instance.renderer.setdY(-1f);
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
-            NoahCraft.instance.renderer.setdY(0.5f);
+            NoahCraft.instance.renderer.setdY(1f);
         }
+
+
     }
 
 }

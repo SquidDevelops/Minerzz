@@ -123,14 +123,7 @@ public class RenderFiller {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-        translation.translate(dX, dY, dZ);
-        projection.rotateY((float)Math.toRadians((dRY)));
-        projection.rotateX((float)Math.toRadians((dRX)));
-        dX = 0;
-        dY = 0;
-        dZ = 0;
-        dRY = 0;
-        dRX = 0;
+
 //        translation.rotateY((float) Math.toRadians(1.0));
 
         Shaders.bind();
@@ -138,6 +131,12 @@ public class RenderFiller {
         Shaders.setUniform("projection", projection);
         Shaders.setUniform("transform", translation);
         Shaders.setUniform("textureSampler", 0);
+
+        dX = 0;
+        dY = 0;
+        dZ = 0;
+        dRY = 0;
+        dRX = 0;
 
 
         for (Mesh chunk : meshes)
@@ -156,6 +155,17 @@ public class RenderFiller {
             cube.dispose();
         texture.dispose();
         Shaders.dispose();
+    }
+
+    public void update() {
+        translation.translate(dX, dY, dZ);
+        projection.rotateY((float) Math.toRadians((dRY)));
+        projection.rotateX((float) Math.toRadians((dRX)));
+
+    }
+
+    public void translate(float x, float y, float z) {
+        translation.translate(x, y, z);
     }
 
 }

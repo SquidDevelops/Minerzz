@@ -29,7 +29,7 @@ public class NoahCraft {
     public RenderFiller renderer;
     public Timing timer;
     public Input input;
-    public Player testPlayer = new Player(1, new Coordinate(0,0,0));
+    public Player testPlayer = new Player(1, new Coordinate(0, 0, 0));
 
     //DELET THIS
     WorldFiller w = new WorldFiller();
@@ -51,11 +51,11 @@ public class NoahCraft {
         dispose();
     }
 
-    public void init(){
+    public void init() {
         glfwSetErrorCallback(errorCallback = createPrint(System.err));
 
         glfwInit();
-        window = new Window(640, 480,"NoahCraft");
+        window = new Window(640, 480, "NoahCraft");
 
         renderer = new RenderFiller(window);
         timer = new Timing();
@@ -63,21 +63,21 @@ public class NoahCraft {
         window.visible(true);
     }
 
-    public void dispose(){
+    public void dispose() {
         window.visible(false);
         renderer.dispose();
         window.dispose();
     }
 
-    public void gameLoop(){
-        double delta, accumulator = 0.0, interval = 1.0/20.0, alpha;
+    public void gameLoop() {
+        double delta, accumulator = 0.0, interval = 1.0 / 20.0, alpha;
         timer.init();
-        while(!window.shouldClose()){
+        while (!window.shouldClose()) {
             timer.update();
             delta = timer.delta();
             accumulator += delta;
             input();
-            while(accumulator > interval) {
+            while (accumulator > interval) {
                 update(delta);
                 accumulator -= interval;
             }
@@ -86,16 +86,20 @@ public class NoahCraft {
         }
     }
 
-    public void input(){
+    public void input() {
         glfwPollEvents();
-        input.update();
+
     }
 
-    public void update(double delta){
+    public void update(double delta) {
         timer.updateUPS();
+        input.update();
+        renderer.update();
+
+
     }
 
-    public void render(){
+    public void render() {
         renderer.render(window);
         window.render();
         testPlayer.update();
