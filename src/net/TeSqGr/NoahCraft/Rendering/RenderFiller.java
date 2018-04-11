@@ -33,7 +33,7 @@ public class RenderFiller {
 
     private Texture texture;
 
-    private int[] randomChunk = new int[16 * 256 * 16];
+    private int[] randomChunk = new int[16 * 256 * 16], solidChunk = new int[16 * 256 * 16];
 
     private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
 
@@ -62,6 +62,12 @@ public class RenderFiller {
     }
 
     private float dRY = 0;
+
+    public void setdRX(float dRX) {
+        this.dRX = dRX;
+    }
+
+    private float dRX = 0;
 
     private List<Mesh> meshes = new ArrayList<>();
 
@@ -99,6 +105,12 @@ public class RenderFiller {
         RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0);
         Mesh_chunk = new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture);
         meshes.add(Mesh_chunk);
+
+        for (int i = 0; i < solidChunk.length; i++)
+            solidChunk[i] = 1;
+
+        RenderChunk renderChunk2 = new RenderChunk(solidChunk, 2, 0);
+        meshes.add(new Mesh(renderChunk2.getVertices(), renderChunk2.getTexCoords(), renderChunk2.getIndices(), texture));
     }
 
     public void render(Window window) {
@@ -113,10 +125,12 @@ public class RenderFiller {
 
         translation.translate(dX, dY, dZ);
         projection.rotateY((float)Math.toRadians((dRY)));
+        projection.rotateX((float)Math.toRadians((dRX)));
         dX = 0;
         dY = 0;
         dZ = 0;
         dRY = 0;
+        dRX = 0;
 //        translation.rotateY((float) Math.toRadians(1.0));
 
         Shaders.bind();

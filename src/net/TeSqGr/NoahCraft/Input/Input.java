@@ -19,10 +19,16 @@ public class Input {
             NoahCraft.instance.renderer.setdX(-0.5f);
         }
 
-        if (KeyboardHandler.isKeyDown(GLFW_KEY_Q)) {
-            NoahCraft.instance.renderer.setdRY(0.5f);
-        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_E)) {
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT)) {
             NoahCraft.instance.renderer.setdRY(-0.5f);
+        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_RIGHT)) {
+            NoahCraft.instance.renderer.setdRY(0.5f);
+        }
+
+        if (KeyboardHandler.isKeyDown(GLFW_KEY_UP)) {
+            NoahCraft.instance.renderer.setdRX(-0.5f);
+        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_DOWN)) {
+            NoahCraft.instance.renderer.setdRX(0.5f);
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_SPACE)) {
