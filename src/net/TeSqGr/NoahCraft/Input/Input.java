@@ -1,22 +1,28 @@
 package net.TeSqGr.NoahCraft.Input;
 
+import net.TeSqGr.NoahCraft.Constants;
+import net.TeSqGr.NoahCraft.Entity.Camera;
 import net.TeSqGr.NoahCraft.NoahCraft;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Input {
+public class Input implements Constants {
+    Vector3f cameraInc = new Vector3f();
 
-    public void update() {
+    public void input() {
+        cameraInc.set(0, 0, 0);
         if (KeyboardHandler.isKeyDown(GLFW_KEY_W)) {
-            NoahCraft.instance.renderer.setdZ(1f);
+            cameraInc.z = -1f;
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_S)) {
-            NoahCraft.instance.renderer.setdZ(-1f);
+            cameraInc.z = 1f;
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_A)) {
-            NoahCraft.instance.renderer.setdX(1f);
+            cameraInc.x = -1f;
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_D)) {
-            NoahCraft.instance.renderer.setdX(-1f);
+            cameraInc.x = 1f;
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT)) {
@@ -38,12 +44,24 @@ public class Input {
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_SPACE)) {
-            NoahCraft.instance.renderer.setdY(-1f);
+            cameraInc.y = -1f;
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
-            NoahCraft.instance.renderer.setdY(1f);
+            cameraInc.y = 1f;
         }
 
+    }
 
+    public void update(MouseInput mouseInput) {
+// Update camera position
+        NoahCraft.instance.getCamera().movePosition(cameraInc.x * CAMERA_POS_STEP,
+                cameraInc.y * CAMERA_POS_STEP,
+                cameraInc.z * CAMERA_POS_STEP);
+
+        // Update camera based on mouse
+//        if (mouseInput.isRightButtonPressed()) {
+            Vector2f rotVec = mouseInput.getDisplVec();
+            NoahCraft.instance.getCamera().moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+//        }
     }
 
 }

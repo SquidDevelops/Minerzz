@@ -1,6 +1,7 @@
 package net.TeSqGr.NoahCraft.Rendering;
 
 
+import net.TeSqGr.NoahCraft.Entity.Camera;
 import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Window.Window;
 import org.joml.Matrix4f;
@@ -117,7 +118,7 @@ public class RenderFiller {
         meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));
     }
 
-    public void render(Window window) {
+    public void render(Window window, Camera camera) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (window.isResized()) {
@@ -133,7 +134,7 @@ public class RenderFiller {
         Shaders.bind();
 
         Shaders.setUniform("projection", projection);
-        Shaders.setUniform("transform", translation);
+        Shaders.setUniform("transform", getViewMatrix(camera));
         Shaders.setUniform("textureSampler", 0);
 
         dX = 0;
@@ -161,15 +162,18 @@ public class RenderFiller {
         Shaders.dispose();
     }
 
-    public void update() {
-        translation.translate(dX, dY, dZ);
-        projection.rotateY((float) Math.toRadians((dRY)));
-        projection.rotateX((float) Math.toRadians((dRX)));
 
-    }
+    public Matrix4f getViewMatrix(Camera camera) {
+        Vector3f cameraPos = camera.getPosition();
+        Vector3f rotation = camera.getRotation();
 
-    public void translate(float x, float y, float z) {
-        translation.translate(x, y, z);
+        translation.identity();
+        // First do the rotation so camera rotates over its position
+        translation.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+        // Then do the translation
+        translation.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        return translation;
     }
 
 }

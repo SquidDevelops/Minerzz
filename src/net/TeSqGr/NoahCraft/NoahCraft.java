@@ -2,9 +2,11 @@ package net.TeSqGr.NoahCraft;
 
 import java.util.logging.Logger;
 
+import net.TeSqGr.NoahCraft.Entity.Camera;
 import net.TeSqGr.NoahCraft.Entity.Player.Player;
 import net.TeSqGr.NoahCraft.Input.Input;
 import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
+import net.TeSqGr.NoahCraft.Input.MouseInput;
 import net.TeSqGr.NoahCraft.Rendering.RenderFiller;
 import net.TeSqGr.NoahCraft.Timing.Timing;
 import net.TeSqGr.NoahCraft.Window.Window;
@@ -29,6 +31,13 @@ public class NoahCraft {
     public RenderFiller renderer;
     public Timing timer;
     public Input input;
+    public MouseInput mouseInput;
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    private Camera camera;
     public Player testPlayer = new Player(1, new Coordinate(0, 0, 0));
 
     //DELET THIS
@@ -60,6 +69,9 @@ public class NoahCraft {
         renderer = new RenderFiller(window);
         timer = new Timing();
         input = new Input();
+        mouseInput = new MouseInput();
+        mouseInput.init(window);
+        camera = new Camera();
         window.visible(true);
     }
 
@@ -88,19 +100,18 @@ public class NoahCraft {
 
     public void input() {
         glfwPollEvents();
+        mouseInput.input(window);
+        input.input();
 
     }
 
     public void update(double delta) {
         timer.updateUPS();
-        input.update();
-        renderer.update();
-
-
+        input.update(mouseInput);
     }
 
     public void render() {
-        renderer.render(window);
+        renderer.render(window, camera);
         window.render();
         testPlayer.update();
         timer.updateFPS();
