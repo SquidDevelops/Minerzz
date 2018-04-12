@@ -3,15 +3,21 @@ package net.TeSqGr.NoahCraft.Input;
 import net.TeSqGr.NoahCraft.Constants;
 import net.TeSqGr.NoahCraft.Entity.Camera;
 import net.TeSqGr.NoahCraft.NoahCraft;
+import net.TeSqGr.NoahCraft.Window.Window;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
+
+import java.nio.DoubleBuffer;
+import java.security.Key;
 
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Input implements Constants {
     Vector3f cameraInc = new Vector3f();
-
-    public void input() {
+    DoubleBuffer x = BufferUtils.createDoubleBuffer(1);
+    DoubleBuffer y = BufferUtils.createDoubleBuffer(1);
+    public void input(Window window) {
         cameraInc.set(0, 0, 0);
         if (KeyboardHandler.isKeyDown(GLFW_KEY_W)) {
             cameraInc.z = -1f;
@@ -25,10 +31,8 @@ public class Input implements Constants {
             cameraInc.x = 1f;
         }
 
-        if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT)) {
-            NoahCraft.instance.renderer.setdRY(-1f);
-        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_RIGHT)) {
-            NoahCraft.instance.renderer.setdRY(1f);
+        if(!KeyboardHandler.isKeyDown(GLFW_KEY_LEFT_CONTROL)){
+
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_UP)) {
