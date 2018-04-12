@@ -100,7 +100,7 @@ public class RenderFiller {
         //meshes.add(new Mesh(CubeData.positions2, CubeData.textCoords, CubeData.indices, texture));
 
         for (int i = 0; i < randomChunk.length; i++)
-            randomChunk[i] = new Random().nextInt(2);
+            randomChunk[i] = new Random().nextInt(3);
 
         RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0, texture.size);
         Mesh_chunk = new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture);
