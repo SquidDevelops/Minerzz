@@ -18,10 +18,10 @@ public class RenderChunk {
         texCoordSize = 1.0f/(textureSize/subTextureSize);
 
         texCoords = new float[]{
-            0.0f, 0.0f,
-            0.0f, texCoordSize,
-            texCoordSize, texCoordSize,
-            texCoordSize, 0.0f
+                0.0f, texCoordSize,
+                0.0f, 0.0f,
+                texCoordSize, 0.0f,
+                texCoordSize, texCoordSize,
         };
 
         update(chunk, chunkX, chunkZ);
