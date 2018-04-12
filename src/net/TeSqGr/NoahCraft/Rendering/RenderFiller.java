@@ -85,7 +85,7 @@ public class RenderFiller {
         }
 
         glActiveTexture(GL_TEXTURE0);
-        texture = new Texture("texture.png");
+        texture = new Texture("texture2.png");
 
         aspect = (float) window.getWidth() / window.getHeight();
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);

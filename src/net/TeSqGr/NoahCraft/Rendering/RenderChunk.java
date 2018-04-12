@@ -2,22 +2,35 @@ package net.TeSqGr.NoahCraft.Rendering;
 
 public class RenderChunk {
 
-    private float[] chunkV = new float[16*16*256*18*6];
-    private int[] chunkI = new int[16*16*256*6*6];
-    private int vertexCount = 0, indexCount = 0;
+    private float[] chunkV = new float[4718592]; //16*256*16*6*3 ( 16*256*16 max blocks * 6 faces/block * 12 vert coords/face)
+    private int[] chunkI = new int[2359296]; //16*256*16*6*3 ( 16*256*16 max blocks * 6 faces/block * 6 ind/face)
+    private float[] chunkT = new float[3145728]; //16*256*16*8*6 ( 16*256*16 max blocks * 6 faces/block * 8 coords/face)
+    private float[] texCoords;
+    private int vertexCount = 0, indexCount = 0, texCoordCount = 0;
     private final int subTextureSize = 32;
+    private int textureSize;
     private float texCoordSize;
     private final byte XY_TYPE = 0, XZ_TYPE = 1, YZ_TYPE = 2;
 
 
     RenderChunk(int[] chunk, int chunkX, int chunkZ, int textureSize){
+        this.textureSize = textureSize;
         texCoordSize = 1.0f/(textureSize/subTextureSize);
+
+        texCoords = new float[]{
+            0.0f, 0.0f,
+            0.0f, texCoordSize,
+            texCoordSize, texCoordSize,
+            texCoordSize, 0.0f
+        };
+
         update(chunk, chunkX, chunkZ);
+
     }
 
     public void update(int[] chunk, int chunkX, int chunkZ){
         int offsetX = chunkX*16, offsetZ = chunkZ*16;
-        int vSize = 0, iSize = 0, counter = 0;
+        int vSize = 0, iSize = 0, tSize = 0, counter = 0;
 
         for (int y = 0; y < 256; y++){
             for (int z = 0; z < 16; z++){
@@ -31,6 +44,8 @@ public class RenderChunk {
                                 genIndices(counter, iSize);
                                 counter++;
                                 iSize+=6;
+                                genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 0);
+                                tSize+=8;
                             }
                         } else {
                             genFace( YZ_TYPE, vSize, -0.5f + x + offsetX, y, z + offsetZ);
@@ -38,6 +53,8 @@ public class RenderChunk {
                             genIndices(counter, iSize);
                             counter++;
                             iSize+=6;
+                            genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 0);
+                            tSize+=8;
                         }
                         if (x < 15) {
                             if (chunk[(y * 16 * 16) + (z * 16) + (x + 1)] == 0) {
@@ -47,6 +64,8 @@ public class RenderChunk {
                                 genIndices(counter, iSize);
                                 counter++;
                                 iSize+=6;
+                                genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 1);
+                                tSize+=8;
                             }
                         } else {
                             genFace( YZ_TYPE, vSize, 0.5f + x + offsetX, y, z + offsetZ);
@@ -54,6 +73,8 @@ public class RenderChunk {
                             genIndices(counter, iSize);
                             counter++;
                             iSize+=6;
+                            genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 1);
+                            tSize+=8;
                         }
                         if (z > 0) {
                             if (chunk[(y * 16 * 16) + ((z - 1) * 16) + x] == 0) {
@@ -63,6 +84,8 @@ public class RenderChunk {
                                 genIndices(counter, iSize);
                                 counter++;
                                 iSize+=6;
+                                genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 2);
+                                tSize+=8;
                             }
                         } else {
                             genFace( XY_TYPE, vSize, x + offsetX, y, -0.5f + z + offsetZ);
@@ -70,6 +93,8 @@ public class RenderChunk {
                             genIndices(counter, iSize);
                             counter++;
                             iSize+=6;
+                            genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 2);
+                            tSize+=8;
                         }
                         if (z < 15) {
                             if (chunk[(y * 16 * 16) + ((z + 1)* 16) + x] == 0) {
@@ -78,6 +103,8 @@ public class RenderChunk {
                                 genIndices(counter, iSize);
                                 counter++;
                                 iSize+=6;
+                                genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 3);
+                                tSize+=8;
                             }
                         } else {
                             genFace( XY_TYPE, vSize, x + offsetX, y, 0.5f + z + offsetZ);
@@ -85,6 +112,8 @@ public class RenderChunk {
                             genIndices(counter, iSize);
                             counter++;
                             iSize+=6;
+                            genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 3);
+                            tSize+=8;
                         }
                         if (y > 0) {
                             if (chunk[(y-1)*16*16 + (z * 16) + x] == 0) {
@@ -94,6 +123,8 @@ public class RenderChunk {
                                 genIndices(counter, iSize);
                                 counter++;
                                 iSize+=6;
+                                genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 4);
+                                tSize+=8;
                             }
                         } else {
                             genFace(XZ_TYPE, vSize, x + offsetX, -0.5f + y, z + offsetZ);
@@ -101,6 +132,8 @@ public class RenderChunk {
                             genIndices(counter, iSize);
                             counter++;
                             iSize+=6;
+                            genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 4);
+                            tSize+=8;
                         }
                         if (y < 255) {
                             if (chunk[(y+1)*(16 * 16) + (z * 16) + x] == 0) {
@@ -110,6 +143,8 @@ public class RenderChunk {
                                 genIndices(counter, iSize);
                                 counter++;
                                 iSize+=6;
+                                genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 5);
+                                tSize+=8;
                             }
                         } else {
                             genFace(XZ_TYPE, vSize, x + offsetX, 0.5f + y, z + offsetZ);
@@ -117,12 +152,15 @@ public class RenderChunk {
                             genIndices(counter, iSize);
                             counter++;
                             iSize += 6;
+                            genTexCoords(tSize, chunk[(y*16*16)+(z*16)+x], 5);
+                            tSize+=8;
                         }
                     }
                 }
             }
         }
 
+        texCoordCount = tSize;
         vertexCount = vSize;
         indexCount = iSize;
     }
@@ -131,23 +169,23 @@ public class RenderChunk {
         switch(type){
             case XY_TYPE:
                 for(byte i = 0; i < 4; i++) {
-                    chunkV[location++] = XY2[i*3] + x;
-                    chunkV[location++] = XY2[i*3+1] + y;
-                    chunkV[location++] = XY2[i*3+2] + z;
+                    chunkV[location++] = XY[i*3] + x;
+                    chunkV[location++] = XY[i*3+1] + y;
+                    chunkV[location++] = z;//XY[i*3+2] + z;
                 }
                 break;
             case XZ_TYPE:
                 for(byte i = 0; i < 4; i++) {
-                    chunkV[location++] = XZ2[i*3] + x;
-                    chunkV[location++] = XZ2[i*3+1] + y;
-                    chunkV[location++] = XZ2[i*3+2] + z;
+                    chunkV[location++] = XZ[i*3] + x;
+                    chunkV[location++] = y;//XZ[i*3+1] + y;
+                    chunkV[location++] = XZ[i*3+2] + z;
                 }
                 break;
             case YZ_TYPE:
                 for(byte i = 0; i < 4; i++) {
-                    chunkV[location++] = YZ2[i*3] + x;
-                    chunkV[location++] = YZ2[i*3+1] + y;
-                    chunkV[location++] = YZ2[i*3+2] + z;
+                    chunkV[location++] = x;//YZ[i*3] + x;
+                    chunkV[location++] = YZ[i*3+1] + y;
+                    chunkV[location++] = YZ[i*3+2] + z;
                 }
                 break;
         }
@@ -157,6 +195,16 @@ public class RenderChunk {
         for(int a : baseIndices){
             chunkI[size++] = a+(count*3)+count;
         }
+    }
+
+    private void genTexCoords(int size, int blockID, int face){
+        float x = (((blockID-1)*6+face)%(textureSize/subTextureSize))*texCoordSize,
+            y = (((blockID-1)*6+face)/(textureSize/subTextureSize))*texCoordSize;
+        for(int i = 0; i < 4; i++){
+            chunkT[2*i+size] = texCoords[2*i] + x;
+            chunkT[2*i+size+1] = texCoords[2*i+1] + y;
+        }
+
     }
 
 
@@ -173,42 +221,32 @@ public class RenderChunk {
     }
 
     public float[] getTexCoords(){
-        float[] fTexCoords = new float[indexCount*2];
-        for(int i = 0; i < fTexCoords.length/8; i++){
-            System.arraycopy(texCoords, 0, fTexCoords, 8*i, 8);
-        }
+        float[] fTexCoords = new float[texCoordCount];
+        System.arraycopy(chunkT, 0, fTexCoords, 0, texCoordCount);
         return fTexCoords;
     }
 
     private static int[] baseIndices = {0, 1, 3, 3, 1, 2};
 
 
-    private static float[] XY2 =  {
+    private static float[] XY =  {
             -0.5f,  -0.5f, 0.0f,
             -0.5f, 0.5f, 0.0f,
             0.5f,  0.5f, 0.0f,
             0.5f,  -0.5f, 0.0f
     };
 
-    private static float[] YZ2 = {
+    private static float[] YZ = {
             0.0f,  -0.5f, -0.5f,
             0.0f,  0.5f, -0.5f,
             0.0f,  0.5f, 0.5f,
             0.0f,  -0.5f, 0.5f
     };
 
-    private static float[] XZ2 = {
+    private static float[] XZ = {
             -0.5f,  0.0f, 0.5f,
             -0.5f, 0.0f, -0.5f,
             0.5f,  0.0f, -0.5f,
             0.5f,  0.0f, 0.5f
     };
-
-    private float[] texCoords = {
-        0.0f, 0.0f,
-        0.0f, 0.5f,
-        0.5f, 0.5f,
-        0.5f, 0.0f
-    };
-
 }
