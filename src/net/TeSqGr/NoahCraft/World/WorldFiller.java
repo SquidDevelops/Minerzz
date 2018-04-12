@@ -34,13 +34,13 @@ public class WorldFiller {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 float nx = (float)(x/width - 0.5), ny = (float)(y/height - 0.5);
-                double e = (1.00 * gen1.noise( 1 * nx,  1 * ny)/2+0.5
-                        + 0.50 * gen1.noise( 2 * nx,  2 * ny)/2+0.5
-                        + 0.25 * gen1.noise( 4 * nx,  4 * ny)/2+0.5
-                        + 0.13 * gen1.noise( 8 * nx,  8 * ny)/2+0.5
-                        + 0.06 * gen1.noise(16 * nx, 16 * ny)/2+0.5
-                        + 0.03 * gen1.noise(32 * nx, 32 * ny))/2+0.5;
-                e /= (1.00+0.50+0.25+0.13+0.06+0.03);
+                double e = ((((1.00 * gen1.noise(1 * nx, 1 * ny)) / 2) + 0.5
+                        + ((0.50 * gen1.noise(2 * nx, 2 * ny)) / 2) + 0.5
+                        + ((0.0 * gen1.noise(4 * nx, 4 * ny)) / 2) + 0.5
+                        + ((0.0 * gen1.noise(8 * nx, 8 * ny)) / 2) + 0.5
+                        + ((0.0 * gen1.noise(16 * nx, 16 * ny)) / 2) + 0.5
+                        + (0.0 * gen1.noise(32 * nx, 32 * ny))) / 2) + 0.5;
+                e /= (1.00+0.50+0.0+0.0+0.0+0.0);
                 e = Math.pow(e, 5.00);
                 chunk[y*16+x] = (int)(e * 150);
             }
