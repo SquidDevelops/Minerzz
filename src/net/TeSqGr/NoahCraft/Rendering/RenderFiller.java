@@ -115,7 +115,7 @@ public class RenderFiller {
         RenderChunk renderChunk2 = new RenderChunk(solidChunk, 2, 0, texture.size);
         meshes.add(new Mesh(renderChunk2.getVertices(), renderChunk2.getTexCoords(), renderChunk2.getIndices(), texture));
 
-        oneBlockChunk[20] = 1;
+        oneBlockChunk[20] = 2;
         RenderChunk renderChunk3 = new RenderChunk(oneBlockChunk, 4, 0, texture.size);
         meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));
     }
