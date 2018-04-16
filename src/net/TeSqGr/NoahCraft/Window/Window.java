@@ -51,6 +51,8 @@ public class Window {
         glfwSwapInterval(1);
 
         glfwSetWindowPos(window, x, y);
+
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     }
 
     public void dispose(){

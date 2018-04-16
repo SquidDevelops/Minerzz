@@ -67,7 +67,6 @@ public class NoahCraft {
 
         glfwInit();
         window = new Window(640, 480, "NoahCraft");
-
         renderer = new RenderFiller(window);
         timer = new Timing();
         input = new Input();
@@ -103,7 +102,7 @@ public class NoahCraft {
     public void input() {
         glfwPollEvents();
         mouseInput.input(window);
-        input.input();
+        input.input(window);
 
     }
 
