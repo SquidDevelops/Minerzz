@@ -18,6 +18,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -30,7 +31,9 @@ import java.util.Random;
 
 public class RenderFiller {
 
-    private Mesh Mesh_triangle, Mesh_quad, Mesh_cube, Mesh_chunk;
+    private Mesh Mesh_chunk;
+
+    Skybox skybox;
 
     private Texture texture;
 
@@ -88,6 +91,9 @@ public class RenderFiller {
         glActiveTexture(GL_TEXTURE0);
         texture = new Texture("texture2.png");
 
+        glActiveTexture(GL_TEXTURE1);
+        skybox = new Skybox();
+
         aspect = (float) window.getWidth() / window.getHeight();
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         translation = new Matrix4f().translation(new Vector3f(-8.0f, -16.0f, -30.0f)).
@@ -95,10 +101,6 @@ public class RenderFiller {
                 rotateY((float) Math.toRadians(0.0f)).
                 rotateZ((float) Math.toRadians(0.0f)).
                 scale(1.0f);
-        //Mesh_cube = new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture);
-
-        //meshes.add(new Mesh(CubeData.positions, CubeData.textCoords, CubeData.indices, texture));
-        //meshes.add(new Mesh(CubeData.positions2, CubeData.textCoords, CubeData.indices, texture));
 
         for (int i = 0; i < randomChunk.length; i++)
             randomChunk[i] = new Random().nextInt(3);
@@ -113,7 +115,7 @@ public class RenderFiller {
         RenderChunk renderChunk2 = new RenderChunk(solidChunk, 2, 0, texture.size);
         meshes.add(new Mesh(renderChunk2.getVertices(), renderChunk2.getTexCoords(), renderChunk2.getIndices(), texture));
 
-        oneBlockChunk[20] = 1;
+        oneBlockChunk[20] = 2;
         RenderChunk renderChunk3 = new RenderChunk(oneBlockChunk, 4, 0, texture.size);
         meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));
     }
@@ -147,6 +149,9 @@ public class RenderFiller {
         for (Mesh chunk : meshes)
             chunk.render();
 
+        skybox.render();
+
+
         Shaders.unbind();
 
     }
@@ -156,8 +161,8 @@ public class RenderFiller {
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-        for (Mesh cube : meshes)
-            cube.dispose();
+        for (Mesh chunk : meshes)
+            chunk.dispose();
         texture.dispose();
         Shaders.dispose();
     }

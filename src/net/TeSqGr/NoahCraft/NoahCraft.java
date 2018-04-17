@@ -8,6 +8,7 @@ import net.TeSqGr.NoahCraft.Input.Input;
 import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Input.MouseInput;
 import net.TeSqGr.NoahCraft.Rendering.RenderFiller;
+import net.TeSqGr.NoahCraft.Rendering.Skybox;
 import net.TeSqGr.NoahCraft.Timing.Timing;
 import net.TeSqGr.NoahCraft.Window.Window;
 
@@ -40,6 +41,7 @@ public class NoahCraft {
 
     private Camera camera;
     public Player testPlayer = new Player(1, new Coordinate(0, 0, 0));
+
 
     //DELET THIS
     //WorldFiller w = new WorldFiller();
