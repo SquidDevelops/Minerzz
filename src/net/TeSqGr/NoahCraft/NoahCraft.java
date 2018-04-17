@@ -18,6 +18,7 @@ import static org.lwjgl.system.MemoryUtil.*;
 
 import net.TeSqGr.NoahCraft.World.Coordinate;
 import net.TeSqGr.NoahCraft.World.WorldFiller;
+import net.TeSqGr.NoahCraft.World.Noise;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
@@ -41,7 +42,12 @@ public class NoahCraft {
     public Player testPlayer = new Player(1, new Coordinate(0, 0, 0));
 
     //DELET THIS
-    WorldFiller w = new WorldFiller();
+    //WorldFiller w = new WorldFiller();
+    Noise n;
+
+    {
+        n = new Noise();
+    }
 
     public static void main(String[] args) {
         new NoahCraft();
@@ -93,7 +99,7 @@ public class NoahCraft {
                 accumulator -= interval;
             }
             render();
-            System.out.println("FPS:" + timer.getFPS());
+            //System.out.println("FPS:" + timer.getFPS());
         }
     }
 
