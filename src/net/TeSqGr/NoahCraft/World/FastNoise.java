@@ -39,7 +39,7 @@ public class FastNoise {
 	public enum CellularReturnType {CellValue, NoiseLookup, Distance, Distance2, Distance2Add, Distance2Sub, Distance2Mul, Distance2Div}
 
 	private int m_seed = 1337;
-	private float m_frequency = (float) 0.01;
+	private float m_frequency = (float) 0.005;
 	private Interp m_interp = Interp.Quintic;
 	public NoiseType m_noiseType = NoiseType.Simplex;
 

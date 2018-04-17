@@ -10,15 +10,15 @@ public class Noise {
 
     public Noise()
     {
-        myNoise.SetNoiseType(FastNoise.NoiseType.SimplexFractal); // Set the desired noise type
+        myNoise.SetNoiseType(NoiseType.Perlin); // Set the desired noise type
 
-        float[][] heightMap = new float[32][32]; // 2D heightmap to create terrain
+        int[] heightMap = new int[256]; // 2D heightmap to create terrain
 
-        for (int x = 0; x < 32; x++) {
-            for (int y = 0; y < 32; y++) {
-                heightMap[x][y] = myNoise.GetNoise(x, y);
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                heightMap[x*16+y] = (int)(150*(1.0f+myNoise.GetNoise(x, y)));
             }
         }
-        System.out.println(Arrays.deepToString(heightMap));
+        System.out.println(Arrays.toString(heightMap));
     }
 }

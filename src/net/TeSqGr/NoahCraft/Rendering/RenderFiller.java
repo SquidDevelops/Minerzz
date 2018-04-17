@@ -112,7 +112,7 @@ public class RenderFiller {
         for (int i = 0; i < solidChunk.length; i++)
             solidChunk[i] = 1;
 
-        RenderChunk renderChunk2 = new RenderChunk(solidChunk, 2, 0, texture.size);
+        RenderChunk renderChunk2 = new RenderChunk(solidChunk, 1, 0, texture.size);
         meshes.add(new Mesh(renderChunk2.getVertices(), renderChunk2.getTexCoords(), renderChunk2.getIndices(), texture));
 
         oneBlockChunk[20] = 2;
