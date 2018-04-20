@@ -45,11 +45,7 @@ public class NoahCraft {
 
     //DELET THIS
     //WorldFiller w = new WorldFiller();
-    Noise n;
-
-    {
-        n = new Noise();
-    }
+    Noise n = new Noise();
 
     public static void main(String[] args) {
         new NoahCraft();
