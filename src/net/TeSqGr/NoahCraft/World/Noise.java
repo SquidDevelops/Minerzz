@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class Noise {
 
-    FastNoise myNoise = new FastNoise(); // Create a FastNoise object
+    private FastNoise myNoise = new FastNoise(); // Create a FastNoise object
 
     public Noise()
     {

@@ -18,7 +18,6 @@ import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import net.TeSqGr.NoahCraft.World.Coordinate;
-import net.TeSqGr.NoahCraft.World.WorldFiller;
 import net.TeSqGr.NoahCraft.World.Noise;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
@@ -64,7 +63,7 @@ public class NoahCraft {
         dispose();
     }
 
-    public void init() {
+    private void init() {
         glfwSetErrorCallback(errorCallback = createPrint(System.err));
 
         glfwInit();
@@ -84,7 +83,7 @@ public class NoahCraft {
         window.dispose();
     }
 
-    public void gameLoop() {
+    private void gameLoop() {
         double delta, accumulator = 0.0, interval = 1.0 / 20.0, alpha;
         timer.init();
         while (!window.shouldClose()) {
