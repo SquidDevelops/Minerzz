@@ -12,7 +12,7 @@ public enum BlockType {
     SAND(8, 1500),
     GRAVEL(9, 1500),
     GLASS(10, 1000),
-    WOOL(11, 1000),
+    LEAVES(11, 1000),
     BRICKS(12, 1500),
     OBSIDIAN(13, 16000),
     ICE(14, 1000),

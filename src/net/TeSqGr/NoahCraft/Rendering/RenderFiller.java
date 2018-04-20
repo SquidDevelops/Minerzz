@@ -31,9 +31,7 @@ import java.util.Random;
 
 public class RenderFiller {
 
-    private Mesh Mesh_chunk;
-
-    Skybox skybox;
+    private Skybox skybox;
 
     private Texture texture;
 
@@ -89,7 +87,7 @@ public class RenderFiller {
         }
 
         glActiveTexture(GL_TEXTURE0);
-        texture = new Texture("texture2.png");
+        texture = new Texture("texture3.png");
 
         glActiveTexture(GL_TEXTURE1);
         skybox = new Skybox();
@@ -106,8 +104,7 @@ public class RenderFiller {
             randomChunk[i] = new Random().nextInt(3);
 
         RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0, texture.size);
-        Mesh_chunk = new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture);
-        meshes.add(Mesh_chunk);
+        meshes.add(new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture));
 
         for (int i = 0; i < solidChunk.length; i++)
             solidChunk[i] = 1;
@@ -156,7 +153,6 @@ public class RenderFiller {
 
     }
 
-
     public void dispose() {
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -179,6 +175,11 @@ public class RenderFiller {
         // Then do the translation
         translation.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
         return translation;
+    }
+
+    public void addChunk(int[] blocks, int chunkX, int chunkZ){
+        RenderChunk renderChunk = new RenderChunk(blocks, chunkX, chunkZ, texture.size);
+        meshes.add(new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture));
     }
 
 }

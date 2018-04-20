@@ -17,6 +17,7 @@ import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
 import static org.lwjgl.system.MemoryUtil.*;
 
+import net.TeSqGr.NoahCraft.World.Chunk;
 import net.TeSqGr.NoahCraft.World.Coordinate;
 import net.TeSqGr.NoahCraft.World.Noise;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -44,7 +45,7 @@ public class NoahCraft {
 
     //DELET THIS
     //WorldFiller w = new WorldFiller();
-    Noise n = new Noise();
+
 
     public static void main(String[] args) {
         new NoahCraft();
@@ -75,6 +76,7 @@ public class NoahCraft {
         mouseInput.init(window);
         camera = new Camera();
         window.visible(true);
+        renderer.addChunk(Chunk.genChunk(32,32), 3, 3);
     }
 
     public void dispose() {
