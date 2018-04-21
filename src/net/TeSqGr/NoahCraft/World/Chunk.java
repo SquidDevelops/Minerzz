@@ -10,7 +10,7 @@ public class Chunk {
         int pos = 0;
         for (int height : heightMap) {
             for (int i = 0; i < height; i++)
-                if(i > height-1)
+                if(i > height-2)
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.GRASS.blockID;
                 else if(i > height-6)
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.DIRT.blockID;

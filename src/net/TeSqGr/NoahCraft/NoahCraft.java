@@ -7,7 +7,7 @@ import net.TeSqGr.NoahCraft.Entity.Player.Player;
 import net.TeSqGr.NoahCraft.Input.Input;
 import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Input.MouseInput;
-import net.TeSqGr.NoahCraft.Rendering.RenderFiller;
+import net.TeSqGr.NoahCraft.Rendering.Renderer;
 import net.TeSqGr.NoahCraft.Rendering.Skybox;
 import net.TeSqGr.NoahCraft.Timing.Timing;
 import net.TeSqGr.NoahCraft.Window.Window;
@@ -30,7 +30,7 @@ public class NoahCraft {
     public GLFWErrorCallback errorCallback;
 
     public Window window;
-    public RenderFiller renderer;
+    public Renderer renderer;
     public Timing timer;
     public Input input;
     public MouseInput mouseInput;
@@ -69,7 +69,7 @@ public class NoahCraft {
 
         glfwInit();
         window = new Window(640, 480, "NoahCraft");
-        renderer = new RenderFiller(window);
+        renderer = new Renderer(window);
         timer = new Timing();
         input = new Input();
         mouseInput = new MouseInput();

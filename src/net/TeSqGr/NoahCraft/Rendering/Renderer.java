@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RenderFiller {
+public class Renderer {
 
     private Skybox skybox;
 
@@ -73,7 +73,7 @@ public class RenderFiller {
 
     private List<Mesh> meshes = new ArrayList<>();
 
-    public RenderFiller(Window window) {
+    public Renderer(Window window) {
         GL.createCapabilities();
         Shaders.compileShaders();
         glEnable(GL_DEPTH_TEST);
