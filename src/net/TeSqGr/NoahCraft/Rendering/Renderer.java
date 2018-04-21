@@ -90,7 +90,7 @@ public class Renderer {
         texture = new Texture("texture3.png");
 
         glActiveTexture(GL_TEXTURE1);
-        skybox = new Skybox();
+        skybox = new Skybox(new Vector3f());
 
         aspect = (float) window.getWidth() / window.getHeight();
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
@@ -146,6 +146,7 @@ public class Renderer {
         for (Mesh chunk : meshes)
             chunk.render();
 
+        skybox = new Skybox(camera.getPosition());
         skybox.render();
 
 
@@ -160,6 +161,7 @@ public class Renderer {
         for (Mesh chunk : meshes)
             chunk.dispose();
         texture.dispose();
+        skybox.dispose();
         Shaders.dispose();
     }
 

@@ -98,7 +98,7 @@ public class NoahCraft {
                 accumulator -= interval;
             }
             render();
-            //System.out.println("FPS:" + timer.getFPS());
+            System.out.println("FPS:" + timer.getFPS());
         }
     }
 

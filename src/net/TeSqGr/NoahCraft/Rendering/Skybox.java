@@ -1,69 +1,88 @@
 package net.TeSqGr.NoahCraft.Rendering;
 
-public class Skybox extends Mesh {
+import org.joml.Vector3f;
+
+public class Skybox {
+
+    Mesh skyboxMesh;
 
     static Texture skyTexture = new Texture("skybox.png");
 
-    public Skybox(){
-        super(vertices, texCoords, indices, skyTexture);
+    public Skybox(Vector3f position){
+        update(position);
     }
 
-    public void update(float x){
-
+    public void update(Vector3f position){
+        float[] vertices = new float[60];
+        for(int i = 0; i<60; i+=3){
+            vertices[i] = defaultVertices[i] + position.x;
+            vertices[i+1] = defaultVertices[i+1];
+            vertices[i+2] = defaultVertices[i+2] + position.z;
+        }
+        skyboxMesh = new Mesh(vertices, texCoords, indices, skyTexture);
     }
 
-    private static float[] vertices = new float[] {
+    public void render(){
+        skyboxMesh.render();
+    }
+
+    public void dispose(){
+        skyTexture.dispose();
+        skyboxMesh.dispose();
+    }
+
+    private static float[] defaultVertices = new float[] {
             // V0
-            -100.0f, 100.0f, 100.0f,
+            -155.0f, 300.0f, 155.0f,
             // V1
-            -100.0f, -100.0f, 100.0f,
+            -155.0f, -10.0f, 155.0f,
             // V2
-            100.0f, -100.0f, 100.0f,
+            155.0f, -10.0f, 155.0f,
             // V3
-            100.0f, 100.0f, 100.0f,
+            155.0f, 300.0f, 155.0f,
             // V4
-            -100.0f, 100.0f, -100.0f,
+            -155.0f, 300.0f, -155.0f,
             // V5
-            100.0f, 100.0f, -100.0f,
+            155.0f, 300.0f, -155.0f,
             // V6
-            -100.0f, -100.0f, -100.0f,
+            -155.0f, -10.0f, -155.0f,
             // V7
-            100.0f, -100.0f, -100.0f,
+            155.0f, -10.0f, -155.0f,
 
             // For text coords in top face
             // V8: V4 repeated
-            -100.0f, 100.0f, -100.0f,
+            -155.0f, 300.0f, -155.0f,
             // V9: V5 repeated
-            100.0f, 100.0f, -100.0f,
+            155.0f, 300.0f, -155.0f,
             // V10: V0 repeated
-            -100.0f, 100.0f, 100.0f,
+            -155.0f, 300.0f, 155.0f,
             // V11: V3 repeated
-            100.0f, 100.0f, 100.0f,
+            155.0f, 300.0f, 155.0f,
 
             // For text coords in right face
             // V12: V3 repeated
-            100.0f, 100.0f, 100.0f,
+            155.0f, 300.0f, 155.0f,
             // V13: V2 repeated
-            100.0f, -100.0f, 100.0f,
+            155.0f, -10.0f, 155.0f,
 
             // For text coords in left face
             // V14: V0 repeated
-            -100.0f, 100.0f, 100.0f,
+            -155.0f, 300.0f, 155.0f,
             // V15: V1 repeated
-            -100.0f, -100.0f, 100.0f,
+            -155.0f, -10.0f, 155.0f,
 
             // For text coords in bottom face
             // V16: V6 repeated
-            -100.0f, -100.0f, -100.0f,
+            -155.0f, -10.0f, -155.0f,
             // V17: V7 repeated
-            100.0f, -100.0f, -100.0f,
+            155.0f, -10.0f, -155.0f,
             // V18: V1 repeated
-            -100.0f, -100.0f, 100.0f,
+            -155.0f, -10.0f, 155.0f,
             // V19: V2 repeated
-            100.0f, -100.0f, 100.0f,
+            155.0f, -10.0f, 155.0f,
     };
 
-    private static float[] texCoords = new float[]{
+    private static final float[] texCoords = new float[]{
             0.0f, 0.0f,
             0.0f, 0.5f,
             0.5f, 0.5f,
@@ -96,7 +115,7 @@ public class Skybox extends Mesh {
     };
 
     
-    private static  int[] indices = new int[]{
+    private static final int[] indices = new int[]{
             // Front face
             0, 1, 3, 3, 1, 2,
             // Top Face
