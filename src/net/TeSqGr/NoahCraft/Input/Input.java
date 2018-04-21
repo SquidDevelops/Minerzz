@@ -48,9 +48,9 @@ public class Input implements Constants {
         }
 
         if (KeyboardHandler.isKeyDown(GLFW_KEY_SPACE)) {
-            cameraInc.y = -1f;
-        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
             cameraInc.y = 1f;
+        } else if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
+            cameraInc.y = -1f;
         }
 
     }
