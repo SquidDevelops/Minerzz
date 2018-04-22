@@ -146,7 +146,7 @@ public class Renderer {
         for (Mesh chunk : meshes)
             chunk.render();
 
-        skybox = new Skybox(camera.getPosition());
+        skybox.update(camera.getPosition());
         skybox.render();
 
 

@@ -19,6 +19,8 @@ public class Skybox {
             vertices[i+1] = defaultVertices[i+1];
             vertices[i+2] = defaultVertices[i+2] + position.z;
         }
+        if (skyboxMesh != null)
+            skyboxMesh.dispose();
         skyboxMesh = new Mesh(vertices, texCoords, indices, skyTexture);
     }
 

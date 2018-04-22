@@ -14,6 +14,8 @@ public class Chunk {
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.GRASS.blockID;
                 else if(i > height-6)
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.DIRT.blockID;
+                else if (i==0)
+                    chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.BEDROCK.blockID;
                 else
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.STONE.blockID;
             pos++;
