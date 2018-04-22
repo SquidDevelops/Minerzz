@@ -4,6 +4,11 @@ package net.TeSqGr.NoahCraft.Input;
 import net.TeSqGr.NoahCraft.Window.Window;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
+import org.lwjgl.BufferUtils;
+
+
+import java.nio.DoubleBuffer;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseInput {
@@ -47,11 +52,13 @@ public class MouseInput {
     public void input(Window window) {
         displVec.x = 0;
         displVec.y = 0;
-        if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
-            double deltax = currentPos.x - previousPos.x;
-            double deltay = currentPos.y - previousPos.y;
+        if(previousPos.x > 0 && previousPos.y > 0 && inWindow){
+
+            double deltax = currentPos.x - window.getWidth()/2;
+            double deltay = currentPos.y - window.getHeight()/2;
             boolean rotateX = deltax != 0;
             boolean rotateY = deltay != 0;
+
             if (rotateX) {
                 displVec.y = (float) deltax;
             }
@@ -61,6 +68,8 @@ public class MouseInput {
         }
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
+
+        glfwSetCursorPos(window.getContext(), window.getWidth()/2, window.getHeight()/2);
     }
 
     public boolean isLeftButtonPressed() {

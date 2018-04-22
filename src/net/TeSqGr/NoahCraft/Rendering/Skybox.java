@@ -33,7 +33,7 @@ public class Skybox {
         skyboxMesh.dispose();
     }
 
-    private static float[] defaultVertices = new float[] {
+    private static final float[] defaultVertices = new float[] {
             // V0
             -155.0f, 300.0f, 155.0f,
             // V1
