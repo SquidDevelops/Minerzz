@@ -94,13 +94,13 @@ public class Renderer {
 
         aspect = (float) window.getWidth() / window.getHeight();
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
-        translation = new Matrix4f().translation(new Vector3f(-8.0f, -16.0f, -30.0f)).
+        translation = new Matrix4f().translation(new Vector3f(0.0f, 0.0f, 0.0f)).
                 rotateX((float) Math.toRadians(0.0f)).
                 rotateY((float) Math.toRadians(0.0f)).
                 rotateZ((float) Math.toRadians(0.0f)).
                 scale(1.0f);
 
-        for (int i = 0; i < randomChunk.length; i++)
+        /*for (int i = 0; i < randomChunk.length; i++)
             randomChunk[i] = new Random().nextInt(3);
 
         RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0, texture.size);
@@ -114,7 +114,7 @@ public class Renderer {
 
         oneBlockChunk[20] = 2;
         RenderChunk renderChunk3 = new RenderChunk(oneBlockChunk, 4, 0, texture.size);
-        meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));
+        meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));*/
     }
 
     public void render(Window window, Camera camera) {
@@ -127,8 +127,6 @@ public class Renderer {
             projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
         }
 
-
-//        translation.rotateY((float) Math.toRadians(1.0));
 
         Shaders.bind();
 
