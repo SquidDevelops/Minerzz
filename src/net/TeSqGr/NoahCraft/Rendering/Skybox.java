@@ -4,130 +4,115 @@ import org.joml.Vector3f;
 
 public class Skybox {
 
-    Mesh skyboxMesh;
+    private Mesh skyboxMesh;
 
-    static Texture skyTexture = new Texture("skybox.png");
+    private final Texture skyTexture = new Texture("skybox2.png");
 
-    public Skybox(Vector3f position){
+    public Skybox(Vector3f position) {
         update(position);
     }
 
-    public void update(Vector3f position){
-        float[] vertices = new float[60];
-        for(int i = 0; i<60; i+=3){
+    public void update(Vector3f position) {
+        float[] vertices = new float[72];
+        for (int i = 0; i < 72; i += 3) {
             vertices[i] = defaultVertices[i] + position.x;
-            vertices[i+1] = defaultVertices[i+1];
-            vertices[i+2] = defaultVertices[i+2] + position.z;
+            vertices[i + 1] = defaultVertices[i + 1];
+            vertices[i + 2] = defaultVertices[i + 2] + position.z;
         }
         if (skyboxMesh != null)
             skyboxMesh.dispose();
         skyboxMesh = new Mesh(vertices, texCoords, indices, skyTexture);
     }
 
-    public void render(){
+    public void render() {
         skyboxMesh.render();
     }
 
-    public void dispose(){
+    public void dispose() {
         skyTexture.dispose();
         skyboxMesh.dispose();
     }
 
-    private static final float[] defaultVertices = new float[] {
-            // V0
-            -155.0f, 300.0f, 155.0f,
-            // V1
-            -155.0f, -10.0f, 155.0f,
-            // V2
-            155.0f, -10.0f, 155.0f,
-            // V3
-            155.0f, 300.0f, 155.0f,
-            // V4
-            -155.0f, 300.0f, -155.0f,
-            // V5
-            155.0f, 300.0f, -155.0f,
-            // V6
-            -155.0f, -10.0f, -155.0f,
-            // V7
-            155.0f, -10.0f, -155.0f,
+    private static final float defaultVertices[] = {
+            //Vertices according to faces
+            -155.0f,300.0f,-155.0f,
+            -155.0f,-10.0f,-155.0f,
+            155.0f,-10.0f,-155.0f,
+            155.0f,300.0f,-155.0f,
 
-            // For text coords in top face
-            // V8: V4 repeated
-            -155.0f, 300.0f, -155.0f,
-            // V9: V5 repeated
-            155.0f, 300.0f, -155.0f,
-            // V10: V0 repeated
-            -155.0f, 300.0f, 155.0f,
-            // V11: V3 repeated
-            155.0f, 300.0f, 155.0f,
+            -155.0f,300.0f,155.0f,
+            -155.0f,-10.0f,155.0f,
+            155.0f,-10.0f,155.0f,
+            155.0f,300.0f,155.0f,
 
-            // For text coords in right face
-            // V12: V3 repeated
-            155.0f, 300.0f, 155.0f,
-            // V13: V2 repeated
-            155.0f, -10.0f, 155.0f,
+            155.0f,300.0f,-155.0f,
+            155.0f,-10.0f,-155.0f,
+            155.0f,-10.0f,155.0f,
+            155.0f,300.0f,155.0f,
 
-            // For text coords in left face
-            // V14: V0 repeated
-            -155.0f, 300.0f, 155.0f,
-            // V15: V1 repeated
-            -155.0f, -10.0f, 155.0f,
+            -155.0f,300.0f,-155.0f,
+            -155.0f,-10.0f,-155.0f,
+            -155.0f,-10.0f,155.0f,
+            -155.0f,300.0f,155.0f,
 
-            // For text coords in bottom face
-            // V16: V6 repeated
-            -155.0f, -10.0f, -155.0f,
-            // V17: V7 repeated
-            155.0f, -10.0f, -155.0f,
-            // V18: V1 repeated
-            -155.0f, -10.0f, 155.0f,
-            // V19: V2 repeated
-            155.0f, -10.0f, 155.0f,
+            -155.0f,300.0f,155.0f,
+            -155.0f,300.0f,-155.0f,
+            155.0f,300.0f,-155.0f,
+            155.0f,300.0f,155.0f,
+
+            -155.0f,-10.0f,155.0f,
+            -155.0f,-10.0f,-155.0f,
+            155.0f,-10.0f,-155.0f,
+            155.0f,-10.0f,155.0f
     };
+
+    private static final int[] indices = new int[]{
+            0,1,3,
+            3,1,2,
+            4,5,7,
+            7,5,6,
+            8,9,11,
+            11,9,10,
+            12,13,15,
+            15,13,14,
+            16,17,19,
+            19,17,18,
+            20,21,23,
+            23,21,22};
+
 
     private static final float[] texCoords = new float[]{
-            0.0f, 0.0f,
-            0.0f, 0.5f,
+            0.25f, 0.25f,
+            0.25f, 0.5f,
             0.5f, 0.5f,
-            0.5f, 0.0f,
+            0.5f, 0.25f,
 
-            0.0f, 0.0f,
-            0.5f, 0.0f,
-            0.0f, 0.5f,
-            0.5f, 0.5f,
-
-            // For text coords in top face
-            0.0f, 0.5f,
-            0.5f, 0.5f,
-            0.0f, 1.0f,
-            0.5f, 1.0f,
-
-            // For text coords in right face
-            0.0f, 0.0f,
-            0.0f, 0.5f,
-
-            // For text coords in left face
-            0.5f, 0.0f,
-            0.5f, 0.5f,
-
-            // For text coords in bottom face
-            0.5f, 0.0f,
-            1.0f, 0.0f,
-            0.5f, 0.5f,
+            1.0f, 0.25f,
             1.0f, 0.5f,
-    };
+            0.75f, 0.5f,
+            0.75f, 0.25f,
 
-    
-    private static final int[] indices = new int[]{
-            // Front face
-            0, 1, 3, 3, 1, 2,
-            // Top Face
-            8, 10, 11, 9, 8, 11,
-            // Right face
-            12, 13, 7, 5, 12, 7,
-            // Left face
-            14, 15, 6, 4, 14, 6,
-            // Bottom face
-            16, 18, 19, 17, 16, 19,
-            // Back face
-            4, 6, 7, 5, 4, 7,};
+            0.5f, 0.25f,
+            0.5f, 0.5f,
+            0.75f, 0.5f,
+            0.75f, 0.25f,
+
+            0.25f, 0.25f,
+            0.25f, 0.5f,
+            0.0f, 0.5f,
+            0.0f, 0.25f,
+
+            0.25f, 0.0f,
+            0.25f, 0.25f,
+            0.5f, 0.25f,
+            0.5f, 0.0f,
+
+            0.25f, 0.5f,
+            0.25f, 0.75f,
+            0.5f, 0.75f,
+            0.5f, 0.5f,
+
+    };
 }
+
+
