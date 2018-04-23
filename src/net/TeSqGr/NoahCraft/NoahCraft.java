@@ -76,14 +76,7 @@ public class NoahCraft {
         mouseInput.init(window);
         camera = new Camera();
         window.visible(true);
-        renderer.addChunk(Chunk.genChunk(0,0), 0, 0);
-        renderer.addChunk(Chunk.genChunk(16,0), 0, 1);
-        renderer.addChunk(Chunk.genChunk(0,16), 1, 0);
-        renderer.addChunk(Chunk.genChunk(16,16), 1, 1);
-        renderer.addChunk(Chunk.genChunk(32,16), 1, 2);
-        renderer.addChunk(Chunk.genChunk(48,16), 1, 3);
-        renderer.addChunk(Chunk.genChunk(32,0), 0, 2);
-        renderer.addChunk(Chunk.genChunk(48,0), 0, 3);
+
     }
 
     public void dispose() {

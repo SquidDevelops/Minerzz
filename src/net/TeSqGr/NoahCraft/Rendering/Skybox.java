@@ -2,13 +2,21 @@ package net.TeSqGr.NoahCraft.Rendering;
 
 import org.joml.Vector3f;
 
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+
+
 public class Skybox {
 
     private Mesh skyboxMesh;
 
-    private final Texture skyTexture = new Texture("skybox2.png");
+    private Texture skyTexture;
 
     public Skybox(Vector3f position) {
+        try {
+            skyTexture = new Texture("texture3.png", GL_TEXTURE1);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         update(position);
     }
 
@@ -16,7 +24,7 @@ public class Skybox {
         float[] vertices = new float[72];
         for (int i = 0; i < 72; i += 3) {
             vertices[i] = defaultVertices[i] + position.x;
-            vertices[i + 1] = defaultVertices[i + 1];
+            vertices[i + 1] = defaultVertices[i + 1] + position.y;
             vertices[i + 2] = defaultVertices[i + 2] + position.z;
         }
         if (skyboxMesh != null)
@@ -35,35 +43,35 @@ public class Skybox {
 
     private static final float defaultVertices[] = {
             //Vertices according to faces
-            -155.0f,300.0f,-155.0f,
-            -155.0f,-10.0f,-155.0f,
-            155.0f,-10.0f,-155.0f,
-            155.0f,300.0f,-155.0f,
+            -155.0f,155.0f,-155.0f,
+            -155.0f,-155.0f,-155.0f,
+            155.0f,-155.0f,-155.0f,
+            155.0f,155.0f,-155.0f,
 
-            -155.0f,300.0f,155.0f,
-            -155.0f,-10.0f,155.0f,
-            155.0f,-10.0f,155.0f,
-            155.0f,300.0f,155.0f,
+            -155.0f,155.0f,155.0f,
+            -155.0f,-155.0f,155.0f,
+            155.0f,-155.0f,155.0f,
+            155.0f,155.0f,155.0f,
 
-            155.0f,300.0f,-155.0f,
-            155.0f,-10.0f,-155.0f,
-            155.0f,-10.0f,155.0f,
-            155.0f,300.0f,155.0f,
+            155.0f,155.0f,-155.0f,
+            155.0f,-155.0f,-155.0f,
+            155.0f,-155.0f,155.0f,
+            155.0f,155.0f,155.0f,
 
-            -155.0f,300.0f,-155.0f,
-            -155.0f,-10.0f,-155.0f,
-            -155.0f,-10.0f,155.0f,
-            -155.0f,300.0f,155.0f,
+            -155.0f,155.0f,-155.0f,
+            -155.0f,-155.0f,-155.0f,
+            -155.0f,-155.0f,155.0f,
+            -155.0f,155.0f,155.0f,
 
-            -155.0f,300.0f,155.0f,
-            -155.0f,300.0f,-155.0f,
-            155.0f,300.0f,-155.0f,
-            155.0f,300.0f,155.0f,
+            -155.0f,155.0f,155.0f,
+            -155.0f,155.0f,-155.0f,
+            155.0f,155.0f,-155.0f,
+            155.0f,155.0f,155.0f,
 
-            -155.0f,-10.0f,155.0f,
-            -155.0f,-10.0f,-155.0f,
-            155.0f,-10.0f,-155.0f,
-            155.0f,-10.0f,155.0f
+            -155.0f,-155.0f,155.0f,
+            -155.0f,-155.0f,-155.0f,
+            155.0f,-155.0f,-155.0f,
+            155.0f,-155.0f,155.0f
     };
 
     private static final int[] indices = new int[]{
@@ -107,10 +115,10 @@ public class Skybox {
             0.5f, 0.25f,
             0.5f, 0.0f,
 
-            0.25f, 0.5f,
             0.25f, 0.75f,
-            0.5f, 0.75f,
+            0.25f, 0.5f,
             0.5f, 0.5f,
+            0.5f, 0.75f,
 
     };
 }

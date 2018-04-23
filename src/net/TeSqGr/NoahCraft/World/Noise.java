@@ -6,10 +6,10 @@ import java.util.Arrays;
 
 public class Noise {
 
-    private FastNoise myNoise = new FastNoise(); // Create a FastNoise object
+    private FastNoise myNoise = new FastNoise(3779999); // Create a FastNoise object
 
     public Noise() {
-        myNoise.SetNoiseType(NoiseType.Perlin); // Set the desired noise type
+        myNoise.SetNoiseType(NoiseType.SimplexFractal); // Set the desired noise type
 
     }
 
@@ -21,7 +21,7 @@ public class Noise {
                 heightMap[(x%16) * 16 + (y%16)] = (int) (150 * (1.0f + myNoise.GetNoise(x, y)));
             }
         }
-        System.out.println(Arrays.toString(heightMap));
+        //System.out.println(Arrays.toString(heightMap));
         return heightMap;
 
     }

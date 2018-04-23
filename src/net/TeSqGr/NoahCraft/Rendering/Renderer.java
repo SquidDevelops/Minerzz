@@ -4,6 +4,7 @@ package net.TeSqGr.NoahCraft.Rendering;
 import net.TeSqGr.NoahCraft.Entity.Camera;
 import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Window.Window;
+import net.TeSqGr.NoahCraft.World.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -33,9 +34,7 @@ public class Renderer {
 
     private Skybox skybox;
 
-    private Texture texture;
-
-    private int[] randomChunk = new int[16 * 256 * 16], solidChunk = new int[16 * 256 * 16], oneBlockChunk = new int[16 * 256 * 16];
+    private Texture blockTexture;
 
     private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
 
@@ -71,12 +70,13 @@ public class Renderer {
 
     private float dRX = 0;
 
-    private List<Mesh> meshes = new ArrayList<>();
+    private List<RenderChunk> chunks = new ArrayList<>();
 
     public Renderer(Window window) {
         GL.createCapabilities();
         Shaders.compileShaders();
         glEnable(GL_DEPTH_TEST);
+        //glEnable(GL_TEXTURE_2D);
         //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         try {
             Shaders.createUniform("projection");
@@ -86,10 +86,14 @@ public class Renderer {
             e.printStackTrace();
         }
 
-        glActiveTexture(GL_TEXTURE0);
-        texture = new Texture("texture3.png");
+        //glActiveTexture(GL_TEXTURE0);
+        try {
+            blockTexture = new Texture("texture3.png", GL_TEXTURE0);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
-        glActiveTexture(GL_TEXTURE1);
+
         skybox = new Skybox(new Vector3f());
 
         aspect = (float) window.getWidth() / window.getHeight();
@@ -100,21 +104,17 @@ public class Renderer {
                 rotateZ((float) Math.toRadians(0.0f)).
                 scale(1.0f);
 
-        /*for (int i = 0; i < randomChunk.length; i++)
-            randomChunk[i] = new Random().nextInt(3);
 
-        RenderChunk renderChunk = new RenderChunk(randomChunk, 0, 0, texture.size);
-        meshes.add(new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture));
+        //2nd mesh is always broken, so flush meshes
+        addChunk(0, 0);
+        addChunk(0, 0);
+        removeChunk(1);
+        removeChunk(0);
 
-        for (int i = 0; i < solidChunk.length; i++)
-            solidChunk[i] = 1;
+        for(int x = 0; x<16; x++)
+            for(int z = 0; z<16; z++)
+                addChunk(x,z);
 
-        RenderChunk renderChunk2 = new RenderChunk(solidChunk, 1, 0, texture.size);
-        meshes.add(new Mesh(renderChunk2.getVertices(), renderChunk2.getTexCoords(), renderChunk2.getIndices(), texture));
-
-        oneBlockChunk[20] = 2;
-        RenderChunk renderChunk3 = new RenderChunk(oneBlockChunk, 4, 0, texture.size);
-        meshes.add(new Mesh(renderChunk3.getVertices(), renderChunk3.getTexCoords(), renderChunk3.getIndices(), texture));*/
     }
 
     public void render(Window window, Camera camera) {
@@ -140,13 +140,18 @@ public class Renderer {
         dRY = 0;
         dRX = 0;
 
+        for(int chunk = 0; chunk < chunks.size(); chunk++){
+            if (camera.getPosition().x < chunks.get(chunk).getChunkX()){
 
-        for (Mesh chunk : meshes)
-            chunk.render();
+            }
+        }
+
+
+        for (RenderChunk chunk : chunks)
+            chunk.getChunkMesh().render();
 
         skybox.update(camera.getPosition());
         skybox.render();
-
 
         Shaders.unbind();
 
@@ -156,9 +161,8 @@ public class Renderer {
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-        for (Mesh chunk : meshes)
-            chunk.dispose();
-        texture.dispose();
+        for (int chunk = 0; chunk < chunks.size(); chunk++)
+            removeChunk(chunk);
         skybox.dispose();
         Shaders.dispose();
     }
@@ -177,9 +181,26 @@ public class Renderer {
         return translation;
     }
 
-    public void addChunk(int[] blocks, int chunkX, int chunkZ){
-        RenderChunk renderChunk = new RenderChunk(blocks, chunkX, chunkZ, texture.size);
-        meshes.add(new Mesh(renderChunk.getVertices(), renderChunk.getTexCoords(), renderChunk.getIndices(), texture));
+    public void addChunk(int chunkX, int chunkZ){
+        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16*chunkZ, 16*chunkX), chunkX, chunkZ, blockTexture);
+        chunks.add(renderChunk);
     }
+
+    public void removeChunk(int index){
+        unloadChunk(index);
+        chunks.remove(index);
+    }
+
+    private void unloadChunk(int index){
+        if(chunks.get(index) != null) {
+            chunks.get(index).dispose();
+            chunks.set(index, null);
+        }
+    }
+
+    /*private void changeChunk(int index){
+        unloadChunk(index);
+        chunks.set(index, new);
+    }*/
 
 }
