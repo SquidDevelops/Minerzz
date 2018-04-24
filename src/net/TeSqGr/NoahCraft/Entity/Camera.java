@@ -51,8 +51,10 @@ public class Camera {
     }
 
     public void moveRotation(float offsetX, float offsetY, float offsetZ) {
+        if(rotation.x + offsetX <= 100 && rotation.x +offsetX >= -100)
         rotation.x += offsetX;
-        rotation.y += offsetY;
+
+            rotation.y += offsetY;
         rotation.z += offsetZ;
     }
 }
