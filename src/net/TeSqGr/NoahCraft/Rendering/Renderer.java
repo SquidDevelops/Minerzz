@@ -140,8 +140,8 @@ public class Renderer {
         dRY = 0;
         dRX = 0;
 
-        for (int chunk = 0; chunk < chunks.size(); chunk++) {
-            if (camera.getPosition().x < chunks.get(chunk).getChunkX()) {
+        for (RenderChunk chunk1 : chunks) {
+            if (camera.getPosition().x < chunk1.getChunkX()) {
 
             }
         }
