@@ -89,7 +89,7 @@ public class Renderer {
         //glActiveTexture(GL_TEXTURE0);
         try {
             blockTexture = new Texture("texture3.png", GL_TEXTURE0);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -111,9 +111,9 @@ public class Renderer {
         removeChunk(1);
         removeChunk(0);
 
-        for(int x = 0; x<16; x++)
-            for(int z = 0; z<16; z++)
-                addChunk(x,z);
+        for (int x = 0; x < 16; x++)
+            for (int z = 0; z < 16; z++)
+                addChunk(x, z);
 
     }
 
@@ -140,8 +140,8 @@ public class Renderer {
         dRY = 0;
         dRX = 0;
 
-        for(int chunk = 0; chunk < chunks.size(); chunk++){
-            if (camera.getPosition().x < chunks.get(chunk).getChunkX()){
+        for (RenderChunk chunk1 : chunks) {
+            if (camera.getPosition().x < chunk1.getChunkX()) {
 
             }
         }
@@ -171,28 +171,29 @@ public class Renderer {
     public Matrix4f getViewMatrix(Camera camera) {
         Vector3f cameraPos = camera.getPosition();
         Vector3f rotation = camera.getRotation();
+        System.out.println(rotation.x);
 
         translation.identity();
         // First do the rotation so camera rotates over its position
-        translation.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
-                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+        translation.rotate((float) Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+                .rotate((float) Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
         // Then do the translation
         translation.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
         return translation;
     }
 
-    public void addChunk(int chunkX, int chunkZ){
-        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16*chunkZ, 16*chunkX), chunkX, chunkZ, blockTexture);
+    public void addChunk(int chunkX, int chunkZ) {
+        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16 * chunkZ, 16 * chunkX), chunkX, chunkZ, blockTexture);
         chunks.add(renderChunk);
     }
 
-    public void removeChunk(int index){
+    public void removeChunk(int index) {
         unloadChunk(index);
         chunks.remove(index);
     }
 
-    private void unloadChunk(int index){
-        if(chunks.get(index) != null) {
+    private void unloadChunk(int index) {
+        if (chunks.get(index) != null) {
             chunks.get(index).dispose();
             chunks.set(index, null);
         }

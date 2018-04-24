@@ -14,10 +14,7 @@ public enum BlockType {
     GLASS(10, 1000),
     LEAVES(11, 1000),
     BRICKS(12, 1500),
-    OBSIDIAN(13, 16000),
-    ICE(14, 1000),
-    SNOW(15, 1000),
-    CLAY(16, 1000);
+    OBSIDIAN(13, 16000);
     final int breakTime;
     final int blockID;
 

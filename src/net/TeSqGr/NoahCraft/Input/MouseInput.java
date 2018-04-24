@@ -36,9 +36,7 @@ public class MouseInput {
             currentPos.x = xpos;
             currentPos.y = ypos;
         });
-        glfwSetCursorEnterCallback(window.getContext(), (windowHandle, entered) -> {
-            inWindow = entered;
-        });
+        glfwSetCursorEnterCallback(window.getContext(), (windowHandle, entered) -> inWindow = entered);
         glfwSetMouseButtonCallback(window.getContext(), (windowHandle, button, action, mode) -> {
             leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
             rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
