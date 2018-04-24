@@ -1,4 +1,4 @@
 package net.TeSqGr.NoahCraft.Inventory;
 
-public class Item {
+public enum Item {
 }
