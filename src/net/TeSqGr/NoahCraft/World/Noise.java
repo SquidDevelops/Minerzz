@@ -6,11 +6,11 @@ import java.util.Arrays;
 
 public class Noise {
 
-    private FastNoise myNoise = new FastNoise(3779999); // Create a FastNoise object
+    private FastNoise myNoise;// Create a FastNoise object
 
-    public Noise() {
-        myNoise.SetNoiseType(NoiseType.SimplexFractal); // Set the desired noise type
-
+    public Noise(int seed, float frequency, FastNoise.NoiseType a) {
+        myNoise = new FastNoise(seed, frequency);
+        myNoise.SetNoiseType(a); // Set the desired noise type
     }
 
     public int[] genNoise(int xCoord, int yCoord) {

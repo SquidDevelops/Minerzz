@@ -38,8 +38,8 @@ public class FastNoise {
 	public enum CellularDistanceFunction {Euclidean, Manhattan, Natural}
 	public enum CellularReturnType {CellValue, NoiseLookup, Distance, Distance2, Distance2Add, Distance2Sub, Distance2Mul, Distance2Div}
 
-	private int m_seed = 1337;
-	private float m_frequency = (float) 0.001;
+	private int m_seed;
+	private float m_frequency;
 	private Interp m_interp = Interp.Quintic;
 	public NoiseType m_noiseType = NoiseType.Simplex;
 
@@ -57,11 +57,12 @@ public class FastNoise {
 	private float m_gradientPerturbAmp = (float) (1.0 / 0.45);
 
 	public FastNoise() {
-		this(1337);
+		this(1337, 0.1f);
 	}
 
-	public FastNoise(int seed) {
+	public FastNoise(int seed, float frequency) {
 		m_seed = seed;
+		m_frequency = frequency;
 		CalculateFractalBounding();
 	}
 
