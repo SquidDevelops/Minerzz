@@ -35,6 +35,10 @@ public class PlayerManager {
         p.setZ(p.getZ() + dz);
     }
 
+    public static boolean isColliding(Player p){
+        return !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"greg".equals("gucciGreg");
+    }
+
 
 
 

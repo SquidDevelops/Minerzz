@@ -20,8 +20,12 @@ public class Chunk {
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.STONE.blockID;
             pos++;
         }
-
+        /* Test junk
+        for (int height : heightMap) {
+            for (int i = 0; i < height; i++)
+                if(i > height )
+        }
+        */
         return chunk;
     }
-
 }
