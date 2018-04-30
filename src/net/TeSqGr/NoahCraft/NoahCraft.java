@@ -1,5 +1,9 @@
 package net.TeSqGr.NoahCraft;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Logger;
 
 import net.TeSqGr.NoahCraft.Entity.Camera;
@@ -12,6 +16,7 @@ import net.TeSqGr.NoahCraft.Rendering.Skybox;
 import net.TeSqGr.NoahCraft.Timing.Timing;
 import net.TeSqGr.NoahCraft.Window.Window;
 
+import static net.TeSqGr.NoahCraft.Audio.Music.music;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
@@ -21,7 +26,11 @@ import net.TeSqGr.NoahCraft.World.Chunk;
 import net.TeSqGr.NoahCraft.World.Coordinate;
 import net.TeSqGr.NoahCraft.World.Noise;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
+import net.TeSqGr.NoahCraft.Audio.Music;
+import sun.audio.AudioData;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+import sun.audio.ContinuousAudioDataStream;
 
 public class NoahCraft {
 
@@ -34,6 +43,9 @@ public class NoahCraft {
     public Timing timer;
     public Input input;
     public MouseInput mouseInput;
+    public AudioPlayer MGP = AudioPlayer.player;
+    public ContinuousAudioDataStream loop = null;
+    public AudioStream BGM;
 
     public Camera getCamera() {
         return camera;
@@ -62,6 +74,7 @@ public class NoahCraft {
         init();
         gameLoop();
         dispose();
+        AudioPlayer.player.stop(BGM);
     }
 
     private void init() {
@@ -76,6 +89,12 @@ public class NoahCraft {
         mouseInput.init(window);
         camera = new Camera();
         window.visible(true);
+        try {
+            music();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -119,6 +138,20 @@ public class NoahCraft {
         window.render();
         testPlayer.update();
         timer.updateFPS();
+    }
+
+
+
+    public void music() throws IOException{
+        AudioData MD;
+
+            InputStream test = new FileInputStream("src/net/TeSqGr/NoahCraft/Audio/minecraft.wav");
+            BGM = new AudioStream(test);
+            AudioPlayer.player.start(BGM);
+            MD = BGM.getData();
+            loop = new ContinuousAudioDataStream(MD);
+
+        //MGP.start(loop);
     }
 
 }

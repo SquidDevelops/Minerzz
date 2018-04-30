@@ -21,7 +21,6 @@ public class Noise {
                 heightMap[(x%16) * 16 + (y%16)] = (int) (150 * (1.0f + myNoise.GetNoise(x, y)));
             }
         }
-        //System.out.println(Arrays.toString(heightMap));
         return heightMap;
 
     }

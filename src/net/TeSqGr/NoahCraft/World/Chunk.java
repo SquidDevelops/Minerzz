@@ -1,25 +1,27 @@
 package net.TeSqGr.NoahCraft.World;
 import net.TeSqGr.NoahCraft.World.FastNoise.*;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import static net.TeSqGr.NoahCraft.World.FastNoise.NoiseType.Perlin;
+import static net.TeSqGr.NoahCraft.World.FastNoise.NoiseType.Simplex;
 import static net.TeSqGr.NoahCraft.World.FastNoise.NoiseType.SimplexFractal;
 
 public class Chunk {
 
-    private static Noise n = new Noise(3779999, .001f, SimplexFractal);
-    private static Noise m = new Noise(3779999, .1f, SimplexFractal);
+    Random rand = new Random();
+
+    static int seedy = (int) Math.ceil(Math.random()* 99999);
+    //seedy = rand.nextInt(999999) + 1000;
+
+    private static Noise n = new Noise(seedy, .001f, SimplexFractal);
 
     public static int[] genChunk(int xO, int yO){
         int[] heightMap = n.genNoise(xO ,yO);
-        int[] treeMap = m.genNoise(xO, yO);
-        int[] chunk = new int[65536];
-        ArrayList<Integer> treeLocations = new ArrayList<>();
-        int pos = 0;
-        for (int location : treeMap) {
-            if(location > 0.9f) treeLocations.add(pos);
-            pos++;
-        }
+        int[] chunk = new int[524288];
+        int pos;
         pos = 0;
         for (int height : heightMap) {
             for (int i = 0; i < height; i++)
@@ -32,10 +34,11 @@ public class Chunk {
                 else
                     chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.STONE.blockID;
             pos++;
-
+            //System.out.println(height);
         }
 
 
         return chunk;
+
     }
 }
