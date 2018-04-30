@@ -3,17 +3,22 @@ package net.TeSqGr.NoahCraft.Rendering;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE2;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE20;
 
 
 public class Skybox {
 
     private Mesh skyboxMesh;
+    private Mesh blocks;
 
     private Texture skyTexture;
+    private Texture blockybois;
 
     public Skybox(Vector3f position) {
         try {
-            skyTexture = new Texture("texture3.png", GL_TEXTURE1);
+            skyTexture = new Texture("skybox3.png", GL_TEXTURE1);
+            blockybois = new Texture("texture3.png", GL_TEXTURE1);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -30,15 +35,18 @@ public class Skybox {
         if (skyboxMesh != null)
             skyboxMesh.dispose();
         skyboxMesh = new Mesh(vertices, texCoords, indices, skyTexture);
+        blocks = new Mesh(vertices, texCoords, indices, blockybois);
     }
 
     public void render() {
         skyboxMesh.render();
+        blocks.render();
     }
 
     public void dispose() {
         skyTexture.dispose();
         skyboxMesh.dispose();
+        blocks.render();
     }
 
     private static final float defaultVertices[] = {
