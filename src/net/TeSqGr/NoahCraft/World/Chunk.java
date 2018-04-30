@@ -17,10 +17,12 @@ public class Chunk {
     //seedy = rand.nextInt(999999) + 1000;
 
     private static Noise n = new Noise(seedy, .001f, SimplexFractal);
+    private static Noise m = new Noise(seedy, .01f, SimplexFractal);
 
     public static int[] genChunk(int xO, int yO){
         int[] heightMap = n.genNoise(xO ,yO);
-        int[] chunk = new int[524288];
+        int[] treeMap = m.genNoise(xO ,yO);
+        int[] chunk = new int[65536];
         int pos;
         pos = 0;
         for (int height : heightMap) {
@@ -36,6 +38,11 @@ public class Chunk {
             pos++;
             //System.out.println(height);
         }
+        for (int height : heightMap)
+            for (int i = 0; i < height; i++)
+                if(i > height-1)
+                    chunk[(i*16*16)+((pos/16)*16)+(pos%16)] = BlockType.WOOD.blockID;
+            pos++;
 
 
         return chunk;
