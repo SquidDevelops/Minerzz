@@ -131,7 +131,7 @@ public class NoahCraft {
 
 
     public void music() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        InputStream audioSrc = getClass().getResourceAsStream("Audio/minecraft.wav");
+        InputStream audioSrc = getClass().getResourceAsStream("Audio/strad.wav");
         InputStream bufferedIn = new BufferedInputStream(audioSrc);
         AudioInputStream asl = AudioSystem.getAudioInputStream(bufferedIn);
         AudioFormat af = asl.getFormat();

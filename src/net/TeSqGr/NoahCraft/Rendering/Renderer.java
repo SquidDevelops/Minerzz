@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Point;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -62,6 +63,9 @@ public class Renderer {
 
     private List<RenderChunk> chunks = new ArrayList<>();
 
+
+    private float viewDistance = 64;
+
     public Renderer(Window window) {
         GL.createCapabilities();
         Shaders.compileShaders();
@@ -101,11 +105,15 @@ public class Renderer {
         removeChunk(1);
         removeChunk(0);
 
-        for (int x = 0; x < 16; x++)
-            for (int z = 0; z < 16; z++)
+        for (int x = 0; x < 32; x++)
+            for (int z = 0; z < 32; z++)
                 addChunk(x, z);
 
     }
+
+    public boolean savingToFile = false;
+
+    public ArrayList<RenderChunk> savingChunks = new ArrayList<RenderChunk>();
 
     public void render(Window window, Camera camera) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -137,8 +145,40 @@ public class Renderer {
         }
 
 
-        for (RenderChunk chunk : chunks)
-            chunk.getChunkMesh().render();
+        for (RenderChunk chunk : chunks) {
+            if (Point.distance(chunk.getChunkX() * 16 + 8, chunk.getChunkZ() * 16 + 8, camera.getPosition().x, camera.getPosition().z) <= viewDistance) {
+                if (chunk.getEmpty() == true) {
+                    chunk.update(Chunk.genChunk(16 * chunk.getChunkZ(), 16 * chunk.getChunkX()), chunk.getChunkX(), chunk.getChunkZ());
+                }
+                if (savingChunks.contains(chunk)) {
+                    savingChunks.remove(chunk);
+                }
+                chunk.getChunkMesh().render();
+            }else {
+                if (chunk.getEmpty() == false && savingToFile == false) {
+                    //Chunk.saveChunkToFile(chunk.getChunkBlocks(), chunk.getChunkX(), chunk.getChunkZ());
+                    savingChunks.add(chunk);
+                    chunk.setEmpty(true);
+                    continue;
+                }
+            }
+        }
+
+        if (savingChunks.size() >= 8 && savingToFile == false) {
+            System.out.println("saving!");
+            savingToFile = true;
+            new Thread() {
+                    public void run () {
+                        for (int i = 0; i < savingChunks.size(); i++) {
+                            RenderChunk chunk = savingChunks.get(i);
+                            Chunk.saveChunkToFile(chunk.getChunkBlocks(), chunk.getChunkX(), chunk.getChunkZ());
+                        }
+                        savingChunks.clear();
+                        savingToFile = false;
+                    }
+            }.start();
+
+        }
 
         skybox.update(camera.getPosition());
         skybox.render();
@@ -148,6 +188,12 @@ public class Renderer {
     }
 
     public void dispose() {
+        for (RenderChunk chunk : chunks) {
+            if (chunk.getEmpty() == false)
+            Chunk.saveChunkToFile(chunk.getChunkBlocks(), chunk.getChunkX(), chunk.getChunkZ());
+        }
+
+
         glDisableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -173,7 +219,7 @@ public class Renderer {
     }
 
     public void addChunk(int chunkX, int chunkZ) {
-        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16 * chunkZ, 16 * chunkX), chunkX, chunkZ, blockTexture);
+        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16 * chunkZ, 16 * chunkX), chunkX, chunkZ, blockTexture, false);
         chunks.add(renderChunk);
     }
 

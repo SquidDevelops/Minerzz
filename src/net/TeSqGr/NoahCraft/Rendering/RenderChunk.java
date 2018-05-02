@@ -1,6 +1,5 @@
 package net.TeSqGr.NoahCraft.Rendering;
-
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import net.TeSqGr.NoahCraft.World.Chunk;
 
 public class RenderChunk {
 
@@ -15,8 +14,33 @@ public class RenderChunk {
     private Texture texture;
     private Mesh chunkMesh;
 
+    private int[] chunkBlocks;
+
+    private boolean isEmpty = true;
+
+
+
+    RenderChunk(int[] chunk, int chunkX, int chunkZ, Texture _texture, boolean update){
+        chunkBlocks = chunk;
+        texture = _texture;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+        this.textureSize = texture.size;
+        texCoordSize = 1.0f/(textureSize/subTextureSize);
+
+        texCoords = new float[]{
+                0.0f, texCoordSize,
+                0.0f, 0.0f,
+                texCoordSize, 0.0f,
+                texCoordSize, texCoordSize,
+        };
+        if (update == true)
+        update(chunk, chunkX, chunkZ);
+
+    }
 
     RenderChunk(int[] chunk, int chunkX, int chunkZ, Texture _texture){
+        chunkBlocks = chunk;
         texture = _texture;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
@@ -35,7 +59,13 @@ public class RenderChunk {
     }
 
     public void update(int[] chunk, int chunkX, int chunkZ){
-
+        if (this.isEmpty == true) {
+            int[] chunks = Chunk.readChunkFromFile(chunkX, chunkZ);
+            if (chunks != null) {
+                chunk = chunks;
+            }
+        }
+        chunkBlocks = chunk;
         float[] chunkV = new float[2359296]; //16*256*16*6*3 ( 16*256*16 max blocks * 6 faces/block * 12 vert coords/face)
         int[] chunkI = new int[1179648]; //16*256*16*6*3 ( 16*256*16 max blocks * 6 faces/block * 6 ind/face)
         float[] chunkT = new float[1572864]; //16*256*16*8*6 ( 16*256*16 max blocks * 6 faces/block * 8 coords/face)
@@ -178,6 +208,7 @@ public class RenderChunk {
         if(chunkMesh != null)
             chunkMesh.dispose();
         chunkMesh = new Mesh(getVertices(chunkV), getTexCoords(chunkT), getIndices(chunkI), texture);
+        isEmpty = false;
     }
 
     private float[] genFace(float[] chunkV, byte type, int location, float x, float y, float z){
@@ -243,18 +274,33 @@ public class RenderChunk {
         return fTexCoords;
     }
 
+    public boolean getEmpty() {
+        return this.isEmpty;
+    }
+
     public Mesh getChunkMesh(){
         return chunkMesh;
     }
 
     public void dispose(){
+
         texture.dispose();
+        if (this.isEmpty == false)
         chunkMesh.dispose();
     }
 
     public int getChunkX(){return chunkX;}
 
     public int getChunkZ(){return chunkZ;}
+
+    public int[] getChunkBlocks() {
+        return this.chunkBlocks;
+    }
+
+    public void setEmpty(boolean isEmpty) {
+        this.isEmpty = isEmpty;
+    }
+
 
     private static final int[] baseIndices = {0, 1, 3, 3, 1, 2};
 

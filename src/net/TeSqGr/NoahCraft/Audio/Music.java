@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Music {
-    public static void music()
+    public static void Music()
     {
         AudioPlayer MGP = AudioPlayer.player;
         AudioStream BGM;
