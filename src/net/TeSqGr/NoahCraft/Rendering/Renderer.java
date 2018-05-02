@@ -26,7 +26,7 @@ public class Renderer {
 
     private Texture blockTexture;
 
-    private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
+    private static final float FOV = (float) Math.toRadians(120.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
 
     private float aspect;
 
