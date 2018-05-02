@@ -2,33 +2,21 @@ package net.TeSqGr.NoahCraft.Rendering;
 
 
 import net.TeSqGr.NoahCraft.Entity.Camera;
-import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Window.Window;
 import net.TeSqGr.NoahCraft.World.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.system.CallbackI;
-import org.lwjgl.system.MemoryStack;
-import org.lwjgl.system.MemoryUtil;
-
-import java.nio.FloatBuffer;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.system.MemoryUtil.memFree;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class Renderer {
 
@@ -171,7 +159,7 @@ public class Renderer {
     public Matrix4f getViewMatrix(Camera camera) {
         Vector3f cameraPos = camera.getPosition();
         Vector3f rotation = camera.getRotation();
-        System.out.println(rotation.x);
+        //  System.out.println(rotation.x);
 
         translation.identity();
         // First do the rotation so camera rotates over its position
@@ -197,6 +185,10 @@ public class Renderer {
             chunks.get(index).dispose();
             chunks.set(index, null);
         }
+    }
+
+    private void update(){
+        chunks.remove(true);
     }
 
     /*private void changeChunk(int index){

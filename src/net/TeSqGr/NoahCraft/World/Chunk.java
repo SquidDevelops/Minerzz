@@ -1,20 +1,10 @@
 package net.TeSqGr.NoahCraft.World;
-import net.TeSqGr.NoahCraft.World.FastNoise.*;
-import sun.java2d.pipe.SpanShapeRenderer;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-import static net.TeSqGr.NoahCraft.World.FastNoise.NoiseType.Perlin;
-import static net.TeSqGr.NoahCraft.World.FastNoise.NoiseType.Simplex;
 import static net.TeSqGr.NoahCraft.World.FastNoise.NoiseType.SimplexFractal;
 
 public class Chunk {
 
-    Random rand = new Random();
 
-    static int seedy = (int) Math.ceil(Math.random()* 99999);
-    //seedy = rand.nextInt(999999) + 1000;
+    private static int seedy = (int) Math.ceil(Math.random()* 99999);
 
     private static Noise n = new Noise(seedy, .001f, SimplexFractal);
 

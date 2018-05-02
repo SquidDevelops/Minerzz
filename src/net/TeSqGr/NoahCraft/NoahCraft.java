@@ -1,36 +1,23 @@
 package net.TeSqGr.NoahCraft;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import net.TeSqGr.NoahCraft.Entity.Camera;
+import net.TeSqGr.NoahCraft.Entity.Player.Player;
+import net.TeSqGr.NoahCraft.Input.Input;
+import net.TeSqGr.NoahCraft.Input.MouseInput;
+import net.TeSqGr.NoahCraft.Rendering.Renderer;
+import net.TeSqGr.NoahCraft.Timing.Timing;
+import net.TeSqGr.NoahCraft.Window.Window;
+import net.TeSqGr.NoahCraft.World.Coordinate;
+import org.lwjgl.glfw.GLFWErrorCallback;
+
+import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
-import net.TeSqGr.NoahCraft.Entity.Camera;
-import net.TeSqGr.NoahCraft.Entity.Player.Player;
-import net.TeSqGr.NoahCraft.Input.Input;
-import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
-import net.TeSqGr.NoahCraft.Input.MouseInput;
-import net.TeSqGr.NoahCraft.Rendering.Renderer;
-import net.TeSqGr.NoahCraft.Rendering.Skybox;
-import net.TeSqGr.NoahCraft.Timing.Timing;
-import net.TeSqGr.NoahCraft.Window.Window;
-
-import static net.TeSqGr.NoahCraft.Audio.Music.music;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFWErrorCallback.createPrint;
-import static org.lwjgl.system.MemoryUtil.*;
-
-import net.TeSqGr.NoahCraft.World.Chunk;
-import net.TeSqGr.NoahCraft.World.Coordinate;
-import net.TeSqGr.NoahCraft.World.Noise;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import net.TeSqGr.NoahCraft.Audio.Music;
-import sun.audio.AudioData;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-import sun.audio.ContinuousAudioDataStream;
 
 public class NoahCraft {
 
@@ -43,9 +30,6 @@ public class NoahCraft {
     public Timing timer;
     public Input input;
     public MouseInput mouseInput;
-    public AudioPlayer MGP = AudioPlayer.player;
-    public ContinuousAudioDataStream loop = null;
-    public AudioStream BGM;
 
     public Camera getCamera() {
         return camera;
@@ -74,7 +58,6 @@ public class NoahCraft {
         init();
         gameLoop();
         dispose();
-        AudioPlayer.player.stop(BGM);
     }
 
     private void init() {
@@ -91,7 +74,11 @@ public class NoahCraft {
         window.visible(true);
         try {
             music();
+        } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
             e.printStackTrace();
         }
 
@@ -102,6 +89,7 @@ public class NoahCraft {
         window.visible(false);
         renderer.dispose();
         window.dispose();
+        //System.exit(0);
     }
 
     private void gameLoop() {
@@ -117,7 +105,7 @@ public class NoahCraft {
                 accumulator -= interval;
             }
             render();
-            System.out.println("FPS:" + timer.getFPS());
+            //System.out.println("FPS:" + timer.getFPS());
         }
     }
 
@@ -142,16 +130,21 @@ public class NoahCraft {
 
 
 
-    public void music() throws IOException{
-        AudioData MD;
+    public void music() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
+        InputStream audioSrc = getClass().getResourceAsStream("Audio/minecraft.wav");
+        InputStream bufferedIn = new BufferedInputStream(audioSrc);
+        AudioInputStream asl = AudioSystem.getAudioInputStream(bufferedIn);
+        AudioFormat af = asl.getFormat();
+        Clip clip1 = AudioSystem.getClip();
+        DataLine.Info info = new DataLine.Info(Clip.class, af);
 
-            InputStream test = new FileInputStream("src/net/TeSqGr/NoahCraft/Audio/minecraft.wav");
-            BGM = new AudioStream(test);
-            AudioPlayer.player.start(BGM);
-            MD = BGM.getData();
-            loop = new ContinuousAudioDataStream(MD);
+        Line line1 = AudioSystem.getLine(info);
 
-        //MGP.start(loop);
+        if ( ! line1.isOpen() ) {
+            clip1.open(asl);
+            clip1.loop(Clip.LOOP_CONTINUOUSLY);
+            clip1.start();
+        }
     }
 
 }

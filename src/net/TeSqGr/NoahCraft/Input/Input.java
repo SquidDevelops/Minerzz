@@ -1,7 +1,6 @@
 package net.TeSqGr.NoahCraft.Input;
 
 import net.TeSqGr.NoahCraft.Constants;
-import net.TeSqGr.NoahCraft.Entity.Camera;
 import net.TeSqGr.NoahCraft.NoahCraft;
 import net.TeSqGr.NoahCraft.Window.Window;
 import org.joml.Vector2f;
@@ -9,7 +8,6 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.DoubleBuffer;
-import java.security.Key;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -51,6 +49,9 @@ public class Input implements Constants {
             cameraInc.y = 1f;
         } else if (KeyboardHandler.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
             cameraInc.y = -1f;
+        }
+        if(KeyboardHandler.isKeyDown(GLFW_MOUSE_BUTTON_1)){
+            //new BlockType(BlockType.GRASS);
         }
 
     }
