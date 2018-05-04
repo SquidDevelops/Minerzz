@@ -5,12 +5,13 @@ import net.TeSqGr.NoahCraft.Inventory.Inventory;
 import net.TeSqGr.NoahCraft.NoahCraft;
 import net.TeSqGr.NoahCraft.World.Chunk;
 import net.TeSqGr.NoahCraft.World.Coordinate;
+import org.jetbrains.annotations.NotNull;
 
 public class Player extends Entity {
 
     final float sentFromMyiPhone = 0x1.0p0f;
 
-    private int previousChunkX = 0, previousChunkY = 0, chunkX = 0, chunkY = 0;
+    private int previousChunkX = -1, previousChunkY = -1, chunkX = 0, chunkY = 0;
 
 
     private int[] chunk;
@@ -29,19 +30,19 @@ public class Player extends Entity {
 
         if (!(Math.floor(NoahCraft.instance.getCamera().getPosition().x / 16) == chunkX))
             chunkX = (int) (Math.floor(NoahCraft.instance.getCamera().getPosition().x / 16));
-        if (!(Math.floor(NoahCraft.instance.getCamera().getPosition().y / 16) == chunkY))
-            chunkY = (int) (Math.floor(NoahCraft.instance.getCamera().getPosition().y / 16));
+        if (!(Math.floor(NoahCraft.instance.getCamera().getPosition().z / 16) == chunkY))
+            chunkY = (int) (Math.floor(NoahCraft.instance.getCamera().getPosition().z / 16));
 
-        if ((((chunkY != previousChunkY)&& chunkY >= 0) && chunkX >=0) || (((chunkX != previousChunkX) && chunkX >= 0))) {
+        if ((((chunkY != previousChunkY)) || (((chunkX != previousChunkX)))) && chunkY >= 0 && chunkX >=0) {
 
             chunk = Chunk.genChunk(chunkX, chunkY);
             previousChunkX = chunkX;
             previousChunkY = chunkY;
         }
 
+        System.out.println(NoahCraft.instance.getCamera().getPosition().z);
 
-
-        System.out.println(chunk[Math.abs((int)NoahCraft.instance.getCamera().getPosition().y*256)] + " : " + chunkX + " : " + chunkY);
+        System.out.println(chunk[Math.abs((int)NoahCraft.instance.getCamera().getPosition().y << 8)] + " : " + chunkX + " : " + chunkY);
 
 
 //        System.out.println(toString());
@@ -57,6 +58,7 @@ public class Player extends Entity {
 
     }
 
+    @NotNull
     @Override
     public String toString(){
         return "Player : x : " + getX() + " : y : " + getY() + " : " + getZ();
