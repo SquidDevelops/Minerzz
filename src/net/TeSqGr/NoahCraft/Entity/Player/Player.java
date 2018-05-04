@@ -41,7 +41,7 @@ public class Player extends Entity {
 
 
 
-        System.out.println(chunk[(int)NoahCraft.instance.getCamera().getPosition().y] + " : " + chunkX + " : " + chunkY);
+        System.out.println(chunk[Math.abs((int)NoahCraft.instance.getCamera().getPosition().y*256)] + " : " + chunkX + " : " + chunkY);
 
 
 //        System.out.println(toString());

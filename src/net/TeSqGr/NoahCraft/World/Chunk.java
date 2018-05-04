@@ -52,7 +52,7 @@ public class Chunk {
         for (int height : heightMap)
             for (int i = 0; i < height; i++)
                 if (i > height - 1)
-                    chunk[(i * 16 * 16) + ((pos / 16) * 16) + (pos % 16)] = BlockType.WOOD.blockID;
+                    chunk[(i * 256) + ((pos >> 4) << 4) + (pos % 16)] = BlockType.WOOD.blockID;
         pos++;
 
 
