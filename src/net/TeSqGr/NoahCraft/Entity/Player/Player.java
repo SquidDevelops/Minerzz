@@ -32,7 +32,8 @@ public class Player extends Entity {
         if (!(Math.floor(NoahCraft.instance.getCamera().getPosition().y / 16) == chunkY))
             chunkY = (int) (Math.floor(NoahCraft.instance.getCamera().getPosition().y / 16));
 
-        if (((chunkY != previousChunkY)&& chunkY >= 0) || ((chunkX != previousChunkX) && chunkX >= 0)) {
+        if ((((chunkY != previousChunkY)&& chunkY >= 0) && chunkX >=0) || (((chunkX != previousChunkX) && chunkX >= 0))) {
+
             chunk = Chunk.genChunk(chunkX, chunkY);
             previousChunkX = chunkX;
             previousChunkY = chunkY;
@@ -40,7 +41,8 @@ public class Player extends Entity {
 
 
 
-        System.out.println(chunk[1] + " : " + chunkX + " : " + chunkY);
+        System.out.println(chunk[(int)NoahCraft.instance.getCamera().getPosition().y] + " : " + chunkX + " : " + chunkY);
+
 
 //        System.out.println(toString());
     }
