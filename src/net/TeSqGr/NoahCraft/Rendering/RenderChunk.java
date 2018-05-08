@@ -20,7 +20,7 @@ public class RenderChunk {
         texture = _texture;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        this.textureSize = texture.size;
+        this.textureSize = 1024;
         texCoordSize = 1.0f/(textureSize/subTextureSize);
 
         texCoords = new float[]{

@@ -2,31 +2,41 @@ package net.TeSqGr.NoahCraft.Rendering;
 
 
 import net.TeSqGr.NoahCraft.Entity.Camera;
+import net.TeSqGr.NoahCraft.Input.KeyboardHandler;
 import net.TeSqGr.NoahCraft.Window.Window;
 import net.TeSqGr.NoahCraft.World.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.CallbackI;
+import org.lwjgl.system.MemoryStack;
+import org.lwjgl.system.MemoryUtil;
+
+import java.nio.FloatBuffer;
+
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.system.MemoryUtil.memFree;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import java.util.Random;
 
 public class Renderer {
 
     private Skybox skybox;
 
-    private Skybox blocks;
+    private Texture blockTexture, skyTexture;
 
-    private Texture blockTexture;
-
-    private static final float FOV = (float) Math.toRadians(120.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
+    private static final float FOV = (float) Math.toRadians(60.0f), Z_NEAR = 0.01f, Z_FAR = 1000.0f;
 
     private float aspect;
 
@@ -66,6 +76,7 @@ public class Renderer {
         GL.createCapabilities();
         Shaders.compileShaders();
         glEnable(GL_DEPTH_TEST);
+        //glEnable(GL_SCISSOR_TEST);
         //glEnable(GL_TEXTURE_2D);
         //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
         try {
@@ -76,15 +87,18 @@ public class Renderer {
             e.printStackTrace();
         }
 
+
         //glActiveTexture(GL_TEXTURE0);
         try {
-            blockTexture = new Texture("texture3.png", GL_TEXTURE0);
-        } catch (Exception e) {
+            skyTexture = new Texture("skybox3.png");
+            blockTexture = new Texture("texture3.png");
+        }catch(Exception e){
             e.printStackTrace();
         }
 
+        //glActiveTexture(GL_TEXTURE1);
+        skybox = new Skybox(new Vector3f(), skyTexture);
 
-        skybox = new Skybox(new Vector3f());
 
         aspect = (float) window.getWidth() / window.getHeight();
         projection = new Matrix4f().perspective(FOV, aspect, Z_NEAR, Z_FAR);
@@ -96,15 +110,18 @@ public class Renderer {
 
 
         //2nd mesh is always broken, so flush meshes
-        addChunk(0, 0);
+        /*addChunk(0, 0);
         addChunk(0, 0);
         removeChunk(1);
-        removeChunk(0);
+        removeChunk(0);*/
 
-        for (int x = 0; x < 16; x++)
-            for (int z = 0; z < 16; z++)
-                addChunk(x, z);
+        for(int x = -4; x<4; x++)
+            for(int z = -4; z<4; z++)
+                addChunk(x,z);
 
+        /*for(int x = 0; x<8; x++)
+            for(int z = 0; z<8; z++)
+                addChunk(x,z);*/
     }
 
     public void render(Window window, Camera camera) {
@@ -130,18 +147,35 @@ public class Renderer {
         dRY = 0;
         dRX = 0;
 
-        for (RenderChunk chunk1 : chunks) {
-            if (camera.getPosition().x < chunk1.getChunkX()) {
-
+         for(int chunk = 0; chunk < chunks.size(); chunk++){
+            if ((int)(camera.getPosition().x+128)/16 < chunks.get(chunk).getChunkX()+4){
+                addChunk(chunk,chunks.get(chunk).getChunkX()-8, chunks.get(chunk).getChunkZ());
+                removeChunk(chunk+1);
             }
+             if ((int)(camera.getPosition().x-128)/16 > chunks.get(chunk).getChunkX()-4){
+                 addChunk(chunk,chunks.get(chunk).getChunkX()+8, chunks.get(chunk).getChunkZ());
+                 removeChunk(chunk+1);
+             }
+             if ((int)(camera.getPosition().z+128)/16 < chunks.get(chunk).getChunkZ()+4){
+                 addChunk(chunk,chunks.get(chunk).getChunkX(), chunks.get(chunk).getChunkZ()-8);
+                 removeChunk(chunk+1);
+             }
+             if ((int)(camera.getPosition().z-128)/16 > chunks.get(chunk).getChunkZ()-4){
+                 addChunk(chunk,chunks.get(chunk).getChunkX(), chunks.get(chunk).getChunkZ()+8);
+                 removeChunk(chunk+1);
+             }
         }
+
+
+        skybox.update(camera.getPosition());
+        skybox.render();
 
 
         for (RenderChunk chunk : chunks)
             chunk.getChunkMesh().render();
 
-        skybox.update(camera.getPosition());
-        skybox.render();
+        //Shaders.setUniform("textureSampler", 1);
+
 
         Shaders.unbind();
 
@@ -161,41 +195,36 @@ public class Renderer {
     public Matrix4f getViewMatrix(Camera camera) {
         Vector3f cameraPos = camera.getPosition();
         Vector3f rotation = camera.getRotation();
-        //  System.out.println(rotation.x);
 
         translation.identity();
         // First do the rotation so camera rotates over its position
-        translation.rotate((float) Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
-                .rotate((float) Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
+        translation.rotate((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
+                .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
         // Then do the translation
         translation.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
         return translation;
     }
 
-    public void addChunk(int chunkX, int chunkZ) {
-        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16 * chunkZ, 16 * chunkX), chunkX, chunkZ, blockTexture);
+    public void addChunk(int index, int chunkX, int chunkZ){
+        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16*chunkZ, 16*chunkX), chunkX, chunkZ, blockTexture);
+        chunks.add(index, renderChunk);
+    }
+
+    public void addChunk(int chunkX, int chunkZ){
+        RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16*chunkZ, 16*chunkX), chunkX, chunkZ, blockTexture);
         chunks.add(renderChunk);
     }
 
-    public void removeChunk(int index) {
+    public void removeChunk(int index){
         unloadChunk(index);
         chunks.remove(index);
     }
 
-    private void unloadChunk(int index) {
-        if (chunks.get(index) != null) {
+    private void unloadChunk(int index){
+        if(chunks.get(index) != null) {
             chunks.get(index).dispose();
             chunks.set(index, null);
         }
     }
-
-    private void update(){
-        chunks.remove(true);
-    }
-
-    /*private void changeChunk(int index){
-        unloadChunk(index);
-        chunks.set(index, new);
-    }*/
 
 }
