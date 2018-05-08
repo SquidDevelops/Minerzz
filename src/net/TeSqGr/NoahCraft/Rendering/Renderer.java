@@ -109,19 +109,10 @@ public class Renderer {
                 scale(1.0f);
 
 
-        //2nd mesh is always broken, so flush meshes
-        /*addChunk(0, 0);
-        addChunk(0, 0);
-        removeChunk(1);
-        removeChunk(0);*/
-
         for(int x = -4; x<4; x++)
             for(int z = -4; z<4; z++)
                 addChunk(x,z);
 
-        /*for(int x = 0; x<8; x++)
-            for(int z = 0; z<8; z++)
-                addChunk(x,z);*/
     }
 
     public void render(Window window, Camera camera) {
@@ -171,12 +162,9 @@ public class Renderer {
         skybox.render();
 
 
-        for (RenderChunk chunk : chunks)
+        for (RenderChunk chunk : chunks) {
             chunk.getChunkMesh().render();
-
-        //Shaders.setUniform("textureSampler", 1);
-
-
+        }
         Shaders.unbind();
 
     }
@@ -192,7 +180,7 @@ public class Renderer {
     }
 
 
-    public Matrix4f getViewMatrix(Camera camera) {
+    private Matrix4f getViewMatrix(Camera camera) {
         Vector3f cameraPos = camera.getPosition();
         Vector3f rotation = camera.getRotation();
 
@@ -205,17 +193,17 @@ public class Renderer {
         return translation;
     }
 
-    public void addChunk(int index, int chunkX, int chunkZ){
+    private void addChunk(int index, int chunkX, int chunkZ){
         RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16*chunkZ, 16*chunkX), chunkX, chunkZ, blockTexture);
         chunks.add(index, renderChunk);
     }
 
-    public void addChunk(int chunkX, int chunkZ){
+    private void addChunk(int chunkX, int chunkZ){
         RenderChunk renderChunk = new RenderChunk(Chunk.genChunk(16*chunkZ, 16*chunkX), chunkX, chunkZ, blockTexture);
         chunks.add(renderChunk);
     }
 
-    public void removeChunk(int index){
+    private void removeChunk(int index){
         unloadChunk(index);
         chunks.remove(index);
     }

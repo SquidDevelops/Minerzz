@@ -28,13 +28,10 @@ public class Music {
             loop = new ContinuousAudioDataStream(MD);
 
         }
-        catch(FileNotFoundException e){
+        catch(IOException e){
             System.out.print(e.toString());
         }
-        catch(IOException error)
-        {
-            System.out.print(error.toString());
-        }
+
         MGP.start(loop);
     }
 
