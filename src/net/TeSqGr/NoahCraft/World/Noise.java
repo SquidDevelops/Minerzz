@@ -18,7 +18,7 @@ public class Noise {
 
         for (int x = xCoord; x < xCoord+16; x++) {
             for (int y = yCoord; y < yCoord+16; y++) {
-                heightMap[(x%16) * 16 + (y%16)] = (int) (150 * (1.0f + myNoise.GetNoise(x, y)));
+                heightMap[ ((Math.abs(x) == x ? x : Math.abs(x%16+16))%16 * 16) + ((Math.abs(y) == y ? y : Math.abs(y%16+16))%16) ]  = (int) (150 * (1.0f + myNoise.GetNoise(x, y)));
             }
         }
         return heightMap;
